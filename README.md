@@ -8,7 +8,7 @@ Your task is to construct a component implementing the logic of board game Stone
 
 ## Design
 
-I prepared a [design](pts24.png) template for your implementation. Besides that I prepared [simple description of the classes](classes.md) with estimations 
+I prepared a [design](assignment/pts24.png) template for your implementation. Besides that I prepared [simple description of the classes](assignment/classes.md) with estimations 
 
 Note that the design is by no means complete. Most notably
 - You have to add appropriate constructors. Chose your constructors in a way that enables good testing. E.g. card deck and building stacks do not need to be full.
@@ -17,13 +17,13 @@ Note that the design is by no means complete. Most notably
 Also, it is highly likely, that I overlooked something and there are some issues that need to be resolved. Feel free to do necessary changes and adjustments.
 
 I recommend to stick to the following timeline
-- 11. 11. create teams, understand game rules, understand the design (so we can have a meaningful discussion on the lecture).
-- 20. 11. the common part of the project is finished 
-- 27. 11. you are done
+11.11. create teams, understand game rules, understand the design (so we can have a meaningful discussion on the lecture).
+20.11. the common part of the project is finished 
+27.11. you are done
 
 ## Implementation remarks
 
-You should build your project either in Python or in Java. I started the projects for you, including several tools that might help you. See [pts24-python](https://github.com/relatko/pts1-23-python) and [pts24-java](https://github.com/relatko/pts1-23-java). Note that if you use Python, your code should be type annotated and mypy --strict should show no errors. Do not use any except for when handling json.
+You should build your project either in Python or in Java. I started the projects for you, including several tools that might help you. See [pts24-python](https://github.com/relatko/pts24-python) and [pts24-java](https://github.com/relatko/pts24-java). Note that if you use Python, your code should be type annotated and mypy --strict should show no errors. Do not use any except for when handling json.
 
 This is a fairly large project and it would take too long to implement. Thus you will collaborate while implementing the project.
 
