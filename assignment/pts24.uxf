@@ -1,0 +1,490 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>1140</x><y>70</y><w>500</w><h>180</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceStoneAgeGame
+--
+placeFigures(playerId: int, location:Location, figuresCount: int): bool
+makeAction(playerId: int, location: Location, usedResources: Effect[], 
+    desiredResources: Effect[]): bool 
+skipAction(playerId: int, location: Location): bool (only if resources are required)
+useTools(playerId: int, toolIndex: int): bool {affects last action}
+noMoreToolsThisThrow(playerId: int): bool
+feedTribe(playerId: int, resources: Effect[]): bool 
+doNotFeedThisTurn(playerId: int): bool
+makeAllPlayersTakeARewardChoice(playerId: int, reward: Effect):bool</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2130</x><y>90</y><w>210</w><h>80</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceStoneAgeObserver
+--
+update(gameState: string)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>0</y><w>140</w><h>290</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+Location
+--
+ToolMaker
+Hut
+Field
+HuntingGrounds
+Forest
+ClayMound
+Quary
+River
+CivilizationCard1
+CivilizationCard2
+CivilizationCard3
+CivilizationCard4
+BuildingTile1
+BuildingTile2
+BuildingTile3
+BuildingTile4
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>920</x><y>0</y><w>170</w><h>280</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+Effect
+--
+Food
+Wood
+Clay
+Stone
+Gold
+Tool
+Field
+Building
+OneTimeTool2
+OneTimeTool3
+OneTimeTool4
+--
+isResourceOrFood(): bool
+isResource(): bool
+points(): int {is 0 if not 
+    ResourceOrFood}
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2340</x><y>640</y><w>360</w><h>180</h></coordinates><panel_attributes>bg=green
+GamePhaseController
+--
+roundStartingPlayer: PlayerOrder
+gamePhase: GamePhase
+currentPlayer: PlayerOrder
+currentPlayerTakingReward: Optional[PlayerOrder]
+dispatchers: map&lt;GamePhase, InterfaceGamePhaseState&gt;
+--
+-checkPlayersTurn(player: PlayerOrder): bool
+-progressStateAfterSuccesfullAction()
+-progressStateAfterNoActionPossible()
+-progressStateAfterNoActionPossibleByAnyPlayer()
+-tryToDoFurtherActions()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1260</x><y>380</y><w>260</w><h>100</h></coordinates><panel_attributes>bg=blue
+StoneAgeGame
+--
+players: map&lt;PlayerOrder, int&gt; 
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1420</x><y>1770</y><w>300</w><h>60</h></coordinates><panel_attributes>bg=blue
+BuildingTile
+--
+figures:PlayerOrder[]
+--
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1680</x><y>380</y><w>450</w><h>60</h></coordinates><panel_attributes>bg=blue
+StoneAgeObservable
+--
+notify(gameState: string) {Also removes information that should be invisible,
+    but we ignore this}</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1680</x><y>90</y><w>400</w><h>80</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceStoneAgeObservable
+--
+registerObserver(playerId: int,observer: InterfaceStoneAgeObserver)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1510</x><y>410</y><w>190</w><h>30</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>170;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2390</x><y>570</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>1870</x><y>160</y><w>30</w><h>240</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;220</additional_attributes></element><element><id>Relation</id><coordinates><x>2120</x><y>160</y><w>110</w><h>250</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;requires&gt;&gt;
+
+
+</panel_attributes><additional_attributes>10;230;30;230;30;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2260</x><y>1450</y><w>140</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+GamePhase
+--
+PlaceFigures
+MakeAction
+FeedTribe
+NewRound
+WaitingForToolsUse
+AllPlayersTakeAReward
+GameEnd
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2240</x><y>840</y><w>490</w><h>200</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceGamePhaseState
+--
+placeFigures(player: PlayerOrder, location:Location, figuresCount: int): ActionResult
+makeAction(player: PlayerOrder, location: Location, inputResources: Effect[], 
+    outputResources: Effect[]): ActionResult
+skipAction(player: PlayerOrder, location: Location): ActionResult
+useTools(player: PlayerOrder, toolIndex: int):ActionResult
+noMoreToolsThisThrow(player: PlayerOrder): ActionResult
+feedTribe(player: PlayerOrder, resources: Effect[]): ActionResult
+doNotFeedThisTurn(player: PlayerOrder): ActionResult
+makeAllPlayersTakeARewardChoice(player: PlayerOrder, reward: Effect): ActionResult
+tryToMakeAutomaticAction(player: PlayerOrder): HasAction
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2490</x><y>810</y><w>30</w><h>50</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;30;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>60</x><y>1900</y><w>220</w><h>100</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+ActionResult
+--
+Failure
+ActionDone
+ActionDoneWaitForToolsUse
+ActionDoneAllPlayersTakeReward
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>70</x><y>1750</y><w>200</w><h>100</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+HasAction
+--
+WaitingForPlayerAction
+AutomaticActionDone
+NoActionPossible
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>2900</x><y>510</y><w>430</w><h>580</h></coordinates><panel_attributes>*Player on turn*
+
+Class is responsible for checking if the player is on turn. 
+PlaceFigures: player must match currentPlayer
+MakeAction: player must match currentPlayer
+FeedTribe: any player is fine
+NewRound: assertion failure (calls should not happen)
+WaitingForToolsUse: player must match currentPlayer
+WaitingForActionChice: player must match currentPlayer
+AllPlayersTakeAReward: player must match currentPlayerTakingReward
+
+*TryToMakeAutomaticAction*
+
+*PlaceFigures:*
+- has free figures -&gt; WaitingForPlayerAction
+- otherwise -&gt; NoActionPossible
+*MakeAction:* 
+- figures on board -&gt; WaitingForPlayerAction
+- otherwise -&gt; NoActionPossible
+*FeedTribe:*
+- tribe already fed -&gt; NoActionPossible
+- has enough food to feed tribe -&gt; AutomaticActionDone (feed tribe)
+- otherwise -&gt; WaitingForPlayerAction
+*NewRound:*
+- round not initialized -&gt; AutomaticActionDone (initialize round)
+- game ended -&gt; NoActionPossible
+*WaitingForToolsUse:*
+- not enough tools to improve roll outcome -&gt; NoActionPossible
+- otherwise -&gt; WaitingForPlayerAction
+*AllPlayersTakeAReward:*
+- all players have reward - NoActionPossible
+- last player gets reward - AutomaticActionDone (gets the last reward)
+- otherwise -&gt; WaitingForPlayerAction
+*GameEnd:*
+- WaitingForPlayerAction
+
+If NoActionPossible for each player, next phase can start.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1450</x><y>1090</y><w>270</w><h>120</h></coordinates><panel_attributes>bg=red
+ResourceSource
+--
+name: string
+Resource: Effect
+maxFigures: int
+maxFigureColours: int
+figures: PlayerOrder[]
+--
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1030</x><y>600</y><w>360</w><h>60</h></coordinates><panel_attributes>GameBoard
+--
+state(): string
+bg=blue
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>530</y><w>310</w><h>130</h></coordinates><panel_attributes>bg=blue
+PlayerBoard
+--
+points: int
+houses: int
+--
+addPoints(points: int)
+addHouse()
+addEndOfGamePoints()
+state(): string
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1090</x><y>850</y><w>290</w><h>260</h></coordinates><panel_attributes>bg=blue
+ToolMakerHutFields
+--
+toolMakerFigures: PlayerOrder[]
+hutFigures:PlayerOrder[]
+fieldsFigures: PlayerOrder[]
+restriction: int
+--
+placeOnToolMaker(player: Player): bool
+actionToolMaker(player: Player): bool
+canPlaceOnToolMaker(player: Player): bool
+placeOnHut(figures: Player): bool
+actionHut(player: Player): bool
+canPlaceOnHut(player: Player)
+placeOnFields(player: Player): bool
+actionFields(player: Player): bool
+canPlaceOnFields(player: Player)
+newTurn()
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1380</x><y>1860</y><w>340</w><h>70</h></coordinates><panel_attributes>&lt;&lt;interface&gt;&gt;
+Building
+--
+build(resources: Effect[]): Optional[int]  {returns points}
+state(): string
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1420</x><y>1380</y><w>300</w><h>80</h></coordinates><panel_attributes>bg=red
+CivilizationCardPlace
+--
+requiredResources: int
+figures:PlayerOrder[]
+--
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1100</x><y>1430</y><w>210</w><h>60</h></coordinates><panel_attributes>bg=red
+CivilizationCardDeck
+--
+getTop(): Optional[CivilizationCard]
+state: string()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>150</x><y>520</y><w>250</w><h>120</h></coordinates><panel_attributes>bg=blue
+PlayerResourcesAndFood
+--
+resources: map&lt;Effect, int&gt;
+--
+hasResources(resources: Effect[]): bool
+takeResources(resources: Effect[]): bool
+giveResources(resources: Effect[]): bool
+numberOfResourcesForFinalPoints(): int
+state: string()
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>570</x><y>710</y><w>220</w><h>150</h></coordinates><panel_attributes>bg=blue
+PlayerTools
+--
+tools: int[]
+usedTools bnool[]
+--
+newTurn()
+addTool()
+addSingleUseTool(strength: int)
+useTool(index: int): Optional[int]
+hasSufficientTools(goal: int): bool
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1630</x><y>1990</y><w>130</w><h>40</h></coordinates><panel_attributes>bg=green
+SimpleBuilding
+--
+resources: Effect[]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>1990</y><w>190</w><h>60</h></coordinates><panel_attributes>bg=blue
+VariableBuilding
+--
+numberOfResources: int
+numberOfResourceTypes: int
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1230</x><y>1990</y><w>190</w><h>50</h></coordinates><panel_attributes>bg=blue
+ArbitraryBuilding
+--
+maxNumberOfResources: int
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1510</x><y>1920</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>1320</x><y>1950</y><w>390</w><h>60</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>370;40;370;10;10;10;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>1530</x><y>1820</y><w>30</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>UMLClass</id><coordinates><x>660</x><y>1620</y><w>260</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Datatype&gt;&gt;
+CivilisationCard
+--
+immediateEffect:ImmediateEffectType[]
+endOfGameEffect: EndOfGameEffectType[]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>650</y><w>380</w><h>1160</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;1140;360;1140</additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1030</y><w>50</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>30;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1380</x><y>1240</y><w>270</w><h>100</h></coordinates><panel_attributes>bg=red
+CurrentThrow
+--
+throwsFor: Effect
+throwResult: int
+--
+initiate(player: Player, effect: Effect, dices: int)
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1360</x><y>1620</y><w>140</w><h>30</h></coordinates><panel_attributes>AllPlayersTakeReward
+bg=blue
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>810</x><y>1720</y><w>130</w><h>230</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+EndOfGameEffect
+--
+Farmer
+ToolMaker
+Builder
+Shaman
+Medicine
+Art
+Music
+Writing
+Sundial
+Pottery
+Transport
+Weaving
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>640</x><y>1720</y><w>140</w><h>240</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
+ImmediateEffect
+--
+ThrowWood
+ThrowClay
+ThrowStone
+ThrowGold
+Point
+Wood
+Clay
+Stone
+Gold
+Card
+ArbitraryResource
+Food
+AllPlayersTakeReward
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2440</x><y>1060</y><w>290</w><h>40</h></coordinates><panel_attributes>bg=blue
+PlaceFiguresState
+--
+places: Map[Location, InterfaceFigureLocation]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2440</x><y>1130</y><w>290</w><h>40</h></coordinates><panel_attributes>bg=blue
+MakeActionState
+--
+places: Map[Location, InterfaceFigureLocation]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2550</x><y>1270</y><w>180</w><h>30</h></coordinates><panel_attributes>bg=blue
+FeedTribeState
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2530</x><y>1200</y><w>200</w><h>40</h></coordinates><panel_attributes>bg=blue
+NewRoundState
+--
+places: InterfaceFigureLocation[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2550</x><y>1330</y><w>180</w><h>30</h></coordinates><panel_attributes>bg=blue
+WaitingForToolUseState</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2520</x><y>1390</y><w>210</w><h>30</h></coordinates><panel_attributes>bg=blue
+AllPlayersTakeARewardState</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2580</x><y>1440</y><w>150</w><h>30</h></coordinates><panel_attributes>bg=blue
+GameEndState</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>890</y><w>60</w><h>590</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;40;10;40;570;10;570</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1840</x><y>1040</y><w>370</w><h>160</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceFigureLocation
+--
+placeFigures(player: PlayerOrder, figureCount: int):bool
+tryToPlaceFigures(player: PlayerOrder, count: int): HasAction
+makeAction(player: PlayerOrder, inputResources: Effect[], 
+    outputResources: Effect[]): ActionResult
+skipAction(player: PlayerOrder): bool
+tryToMakeAction(player: PlayerOrder): HasAction
+newTurn(): bool {returns true if end of game is implied 
+    by given location}
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>1070</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1770</x><y>700</y><w>190</w><h>360</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>170;340;170;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1540</x><y>1000</y><w>180</w><h>30</h></coordinates><panel_attributes>bg=blue
+PlaceOnHutAdaptor</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1540</x><y>1040</y><w>180</w><h>30</h></coordinates><panel_attributes>bg=blue
+PlaceOnFieldsAdaptor</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1540</x><y>960</y><w>180</w><h>30</h></coordinates><panel_attributes>bg=blue
+PlaceOnToolMakerAdaptor</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>1140</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1670</x><y>710</y><w>30</w><h>70</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>10;10;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>1000</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>830</y><w>430</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>410;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2200</x><y>1140</y><w>260</w><h>30</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;10;240;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>1140</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1370</x><y>1040</y><w>190</w><h>30</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;170;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1370</x><y>1000</y><w>190</w><h>30</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;170;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1370</x><y>960</y><w>190</w><h>30</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;170;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1390</y><w>380</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;360;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>400</y><w>80</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+</panel_attributes><additional_attributes>10;20;60;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>150</x><y>890</y><w>220</w><h>190</h></coordinates><panel_attributes>bg=blue
+PlayerFigures
+--
+totalFigures:int
+figures:int
+--
+addNewFigure()
+hasFigures(count: int): bool
+getTotalFigures(): int
+takeFigures(count: int): bool
+newTurn()
+state: string()
+--
+{Adding figures when you have more 
+than 10 has no effect}
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>560</y><w>210</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>190;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1140</x><y>1310</y><w>170</w><h>60</h></coordinates><panel_attributes>bg=blue
+Throw
+--
+throw(dices: int): int[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1300</x><y>1320</y><w>100</w><h>30</h></coordinates><panel_attributes>lt=-&gt;</panel_attributes><additional_attributes>80;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>630</x><y>1250</y><w>280</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfacePlayerBoardGameBoard
+--
+giveEffect(stuff: Effect[])
+giveEndOfGameEfect(stuff: EndOfGameEffect[])
+takeResources(stuff: Effect[]): bool
+takeFigures(count: int): bool
+hasFigures(count: int): bool
+hasSufficientTools(goal: int): bool
+useTool(idx: int): Optional[int]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>650</y><w>30</w><h>420</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;10;400</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>700</y><w>560</w><h>1140</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>390;1120;10;1120;10;10;540;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>680</x><y>1050</y><w>200</w><h>30</h></coordinates><panel_attributes>bg=blue
+PlayerBoardGameBoardFacade</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>1070</y><w>30</w><h>200</h></coordinates><panel_attributes>lt=.&gt;&gt;</panel_attributes><additional_attributes>10;10;10;180</additional_attributes></element><element><id>Relation</id><coordinates><x>1520</x><y>1200</y><w>30</w><h>60</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>900</x><y>1280</y><w>500</w><h>30</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;10;480;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>90</x><y>500</y><w>830</w><h>620</h></coordinates><panel_attributes>symbol=component
+PlayerBoard</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>2230</x><y>600</y><w>570</w><h>1020</h></coordinates><panel_attributes>symbol=component
+GamePhaseConroller</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>1010</x><y>550</y><w>800</w><h>1520</h></coordinates><panel_attributes>symbol=component
+GameBoard</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1440</x><y>760</y><w>350</w><h>170</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceFigureLocationInternal
+--
+placeFigures(player: Player, figureCount: int):bool
+tryToPlaceFigures(player: Player, count: int): HasAction
+makeAction(player: Player, inputResources: Effect[], 
+    outputResources: Effect[]): ActionResult
+skipAction(player: Player): bool
+tryToMakeAction(player: Player): HasAction
+newTurn(): bool {returns true if end of game is implied by 
+    given location}
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1570</x><y>690</y><w>210</w><h>30</h></coordinates><panel_attributes>bg=blue
+FigureLocationAdaptor</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1500</x><y>590</y><w>280</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Datatype&gt;&gt;
+Player
+--
+playerOrder: PlayerOrder
+playerBoard: InterfacePlayerBoardGameBoard</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1160</y><w>410</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>390;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>1270</y><w>2200</w><h>860</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;90;10;840;2120;840;2120;10;2180;10</additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>1210</y><w>2010</w><h>900</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;100;10;880;1930;880;1930;10;1990;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2390</x><y>1070</y><w>160</w><h>160</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>50;10;10;10;10;140;140;140</additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>1200</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>1270</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1640</x><y>1290</y><w>250</w><h>30</h></coordinates><panel_attributes>lt=.&gt;&gt;</panel_attributes><additional_attributes>10;10;230;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1380</x><y>1490</y><w>300</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+EvaluateCivilisationCardImmediateEffect
+--
+performEffect(player: Player, choice: Effect): bool</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1360</x><y>1670</y><w>140</w><h>40</h></coordinates><panel_attributes>bg=blue
+GetSomethingFixed
+--
+effect: Effect[]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1560</x><y>1620</y><w>130</w><h>40</h></coordinates><panel_attributes>bg=blue
+GetSomethingThrow
+--
+resource: Effect[]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1560</x><y>1670</y><w>180</w><h>40</h></coordinates><panel_attributes>bg=blue
+GetChoice
+--
+numberOfResources: Effect[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1520</x><y>1550</y><w>30</w><h>190</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;170</additional_attributes></element><element><id>Relation</id><coordinates><x>1490</x><y>1670</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>70;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1490</x><y>1620</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1640</x><y>1320</y><w>170</w><h>340</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;150;10;150;320;50;320</additional_attributes></element><element><id>Relation</id><coordinates><x>1300</x><y>1340</y><w>80</w><h>310</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;50;10;50;290;60;290</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>1530</y><w>370</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;350;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>920</y><w>60</w><h>890</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>40;10;40;870;10;870</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1050</x><y>400</y><w>160</w><h>60</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceGetState
+--
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>450</y><w>30</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;150</additional_attributes></element><element><id>Relation</id><coordinates><x>670</x><y>440</y><w>400</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>380;10;10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2150</x><y>400</y><w>640</w><h>180</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceGamePhaseController
+--
+placeFigures(player: PlayerOrder, location:Location, figuresCount: int):bool
+makeAction(player: PlayerOrder, location: Location, inputResources: Effect[], outputResources: Effect[]): bool
+skipAction(player: PlayerOrder, location: Location): bool
+useTools(player: PlayerOrder, toolIndex: int): bool
+noMoreToolsThisThrow(player: PlayerOrder): bool
+feedTribe(player: PlayerOrder, resources: Effect[]): bool
+doNotFeedThisTurn(player: PlayerOrder): bool
+makeAllPlayersTakeARewardChoice(player: PlayerOrder, reward: Effect): bool
+state(): string
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1510</x><y>460</y><w>660</w><h>30</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>640;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1870</x><y>1280</y><w>290</w><h>80</h></coordinates><panel_attributes>InterfaceToolUse
+--
+useTool(idx: int):bool
+canUseTools(): bool
+finishUsingTools(): bool
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1370</x><y>240</y><w>30</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;140</additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>920</y><w>340</w><h>110</h></coordinates><panel_attributes>bg=blue
+PlayerCivilisationCards
+--
+endOfGameEffects: map&lt;EndOfGameEffectType, int&gt;
+--
+addEndOfGameEffects(effects: EndOfGameEffectType[])
+calculateEndOfGameCivilisationCardPoints(buildings: int, 
+    tools: int, fields:int, figures:int): int
+state: string()
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2150</x><y>1330</y><w>420</w><h>30</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;10;400;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1460</x><y>1450</y><w>30</w><h>60</h></coordinates><panel_attributes>lt=.&gt;</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>1300</x><y>1440</y><w>140</w><h>30</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;120;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1580</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;70;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1130</x><y>1570</y><w>170</w><h>120</h></coordinates><panel_attributes>bg=blue
+RewardMenu
+--
+menu: Effect[]
+players: Player[]
+--
+initiate(menu: Effect[])
+state(): string</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1290</x><y>1630</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;70;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1860</x><y>1570</y><w>310</w><h>70</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceTakeReward
+--
+takeReward(player: PlayerOrder, reward: Effect): bool
+tryMakeAction(player: PlayerOrder): HasAction
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>2170</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>70</x><y>1630</y><w>200</w><h>90</h></coordinates><panel_attributes>&lt;&lt;Dataclass&gt;&gt;
+PlayerOrder
+--
+order: int
+players: int
+--
+next():PlayerOrder
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2160</x><y>1400</y><w>380</w><h>210</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;190;50;190;50;10;360;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1290</x><y>1590</y><w>590</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>570;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>960</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>1040</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1260</y><w>340</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>320;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1440</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;40;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>1430</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>730</y><w>230</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>210;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>890</y><w>130</w><h>30</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>110;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>460</x><y>560</y><w>30</w><h>380</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;10;360</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>1070</y><w>80</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;60;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>260</x><y>1250</y><w>210</w><h>110</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceFeedTribe
+--
+feedTribeIfEnoughFood(): bool
+feedTribe(resources: Effect[]): bool
+doNotFeedThisTurn(): bool
+isTribeFed(): bool
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>490</x><y>1250</y><w>120</w><h>60</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+InterfaceNewTurn
+--
+newTurn()
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>1130</y><w>410</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;120;10;10;390;10</additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>1130</y><w>30</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;120;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>150</x><y>670</y><w>220</w><h>200</h></coordinates><panel_attributes>bg=blue
+TribeFedStatus
+--
+tribeFed: bool
+fields: int
+--
+addField()
+newTurn()
+feedTribeIfEnoughFood(): bool
+feedTribe(resources: Effect[]): bool
+setTribeFed(): bool
+isTribeFed(): bool
+state(): string
+--
+{Adding fields when you have more 
+than 10 has no effect}
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>110</x><y>550</y><w>60</w><h>230</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>40;10;10;10;10;210;40;210</additional_attributes></element><element><id>Relation</id><coordinates><x>1660</x><y>1330</y><w>130</w><h>120</h></coordinates><panel_attributes>lt=&lt;-
+
+&lt; next                  </panel_attributes><additional_attributes>10;50;10;20;70;20;70;100;60;100</additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>1390</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>1340</y><w>60</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1460</x><y>1720</y><w>130</w><h>30</h></coordinates><panel_attributes>bg=blue
+GetCard
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1100</x><y>1480</y><w>380</w><h>280</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;10;260;360;260</additional_attributes></element><element><id>Relation</id><coordinates><x>110</x><y>790</y><w>60</w><h>150</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>40;130;10;130;10;10;40;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>0</x><y>300</y><w>2860</w><h>1880</h></coordinates><panel_attributes>symbol=component
+StoneAge</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2720</x><y>850</y><w>200</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;180;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1390</x><y>310</y><w>80</w><h>20</h></coordinates><panel_attributes>bg=red
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1370</x><y>560</y><w>80</w><h>20</h></coordinates><panel_attributes>bg=red
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>510</y><w>110</w><h>20</h></coordinates><panel_attributes>bg=blue
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2430</x><y>610</y><w>170</w><h>20</h></coordinates><panel_attributes>bg=blue
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>1640</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;100;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>1180</y><w>440</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;420;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>1410</y><w>410</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;390;10</additional_attributes></element></diagram>
