@@ -6,4 +6,5 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 
 interface Building {
     OptionalInt build(Collection<Effect> resources);
+    String state();
 }
