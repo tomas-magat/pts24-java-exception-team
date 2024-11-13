@@ -1,7 +1,5 @@
 package sk.uniba.fmph.dcs.player_board;
 
-import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
-
 public class PlayerBoard implements InterfaceGetState {
     private int points;
     private int houses;

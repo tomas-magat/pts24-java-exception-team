@@ -1,7 +1,5 @@
 package sk.uniba.fmph.dcs.player_board;
 
-import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
