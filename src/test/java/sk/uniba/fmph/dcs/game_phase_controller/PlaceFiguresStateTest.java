@@ -46,6 +46,11 @@ public class PlaceFiguresStateTest {
         assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
         figureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
+        figureLocationMock2.expectedHasAction = HasAction.AUTOMATIC_ACTION_DONE;
+
+        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
+
+        figureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
         figureLocationMock2.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);

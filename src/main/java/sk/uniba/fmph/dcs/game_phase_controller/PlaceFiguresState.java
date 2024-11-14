@@ -55,24 +55,15 @@ public class PlaceFiguresState implements InterfaceGamePhaseState{
         return ActionResult.FAILURE;
     }
 
-    //TODO maybe can make automatic action if there is only 1 place available for the figure
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
 
         //can place at least 1 figure at some location
         for(Location location : places.keySet()){
 
-            switch(places.get(location).tryToPlaceFigures(player, 1)){
+            if(places.get(location).tryToPlaceFigures(player, 1) != HasAction.NO_ACTION_POSSIBLE){
 
-                case WAITING_FOR_PLAYER_ACTION:
-                    return HasAction.WAITING_FOR_PLAYER_ACTION;
-                case NO_ACTION_POSSIBLE:
-                    break;
-                //should not have automatic actions when placing figures;
-                case AUTOMATIC_ACTION_DONE:
-                default:
-                    throw new AssertionError();
-
+                return HasAction.WAITING_FOR_PLAYER_ACTION;
             }
         }
 
