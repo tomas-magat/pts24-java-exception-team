@@ -7,5 +7,5 @@ public interface InterfaceFeedTribe {
 
     boolean doNotFeedThisTurn();
 
-    boolean isTribeFood();
+    boolean isTribeFed();
 }
