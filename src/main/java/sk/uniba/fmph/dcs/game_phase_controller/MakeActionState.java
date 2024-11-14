@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class MakeActionState implements InterfaceGamePhaseState{
 
-    private Map<Location, InterfaceFigureLocation> places;
+    private final Map<Location, InterfaceFigureLocation> places;
     public MakeActionState(Map<Location, InterfaceFigureLocation> places){
 
         this.places = places;
@@ -28,7 +28,7 @@ public class MakeActionState implements InterfaceGamePhaseState{
     @Override
     public ActionResult skipAction(PlayerOrder player, Location location) {
 
-        return ActionResult.FAILURE;
+        return places.get(location).skipAction(player)?ActionResult.ACTION_DONE:ActionResult.FAILURE;
     }
 
     @Override

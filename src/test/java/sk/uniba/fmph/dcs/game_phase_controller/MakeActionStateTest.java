@@ -79,14 +79,12 @@ public class MakeActionStateTest {
         return makeActionState.tryToMakeAutomaticAction(new PlayerOrder(0,1));
     }
 
-    private ActionResult makeAction(){
-
-        return makeActionState.makeAction(new PlayerOrder(0,1),Location.BUILDING_TILE1,List.of(), List.of());
-    }
-
-
     @Test
     public void testTryToMakeAutomaticAction(){
+
+        figureLocationMock1.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        figureLocationMock2.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
         figureLocationMock1.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
         figureLocationMock2.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
@@ -94,7 +92,7 @@ public class MakeActionStateTest {
         assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
         figureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
-        figureLocationMock2.expectedHasAction = HasAction.AUTOMATIC_ACTION_DONE;
+        figureLocationMock2.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
@@ -104,11 +102,37 @@ public class MakeActionStateTest {
         assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
     }
 
+    private ActionResult makeAction(){
+
+        return makeActionState.makeAction(new PlayerOrder(0,1),Location.BUILDING_TILE1,List.of(), List.of());
+    }
+
     @Test
     public void testMakeAction(){
 
         figureLocationMock1.expectedActionResult = ActionResult.FAILURE;
 
         assertEquals(makeAction(), ActionResult.FAILURE);
+
+        figureLocationMock1.expectedActionResult = ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
+
+        assertEquals(makeAction(), ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE);
+    }
+
+    private ActionResult skipAction(){
+
+        return makeActionState.skipAction(new PlayerOrder(0, 1), Location.BUILDING_TILE1);
+    }
+
+    @Test
+    public void testSkipAction(){
+
+        figureLocationMock1.expectedBoolean = false;
+
+        assertEquals(skipAction(), ActionResult.FAILURE);
+
+        figureLocationMock1.expectedBoolean = true;
+
+        assertEquals(skipAction(), ActionResult.ACTION_DONE);
     }
 }
