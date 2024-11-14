@@ -1,14 +1,14 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
+
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class PlaceFiguresState implements InterfaceGamePhaseState{
 
-    private Map<Location, InterfaceFigureLocation> places;
+    private final Map<Location, InterfaceFigureLocation> places;
 
     public PlaceFiguresState(Map<Location, InterfaceFigureLocation> places){
 

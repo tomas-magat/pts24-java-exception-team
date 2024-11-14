@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+
 class FigureLocationMock implements InterfaceFigureLocation {
 
     ActionResult expectedActionResult;
@@ -58,13 +59,13 @@ public class PlaceFiguresStateTest {
     private PlaceFiguresState placeFiguresState;
     private FigureLocationMock figureLocationMock1;
     private FigureLocationMock figureLocationMock2;
-    private Map<Location, InterfaceFigureLocation> places;
+
     @Before
     public void setup(){
 
         figureLocationMock1 = new FigureLocationMock();
         figureLocationMock2 = new FigureLocationMock();
-        places = new HashMap<>();
+        Map<Location, InterfaceFigureLocation> places = new HashMap<>();
         places.put(Location.BUILDING_TILE1, figureLocationMock1);
         places.put(Location.BUILDING_TILE2, figureLocationMock2);
 
