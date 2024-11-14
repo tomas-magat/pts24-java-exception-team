@@ -77,23 +77,19 @@ public class PlaceFiguresStateTest {
         return placeFiguresState.tryToMakeAutomaticAction(new PlayerOrder(0,1));
     }
 
-    private ActionResult placeFigures(){
-
-        return placeFiguresState.placeFigures(new PlayerOrder(0,1),Location.BUILDING_TILE1,1);
-
-    }
-
     @Test
     public void testTryToMakeAutomaticAction(){
 
         figureLocationMock1.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
-        figureLocationMock2.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
+        figureLocationMock2.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
+        figureLocationMock1.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        figureLocationMock2.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
         assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
         figureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
-        figureLocationMock2.expectedHasAction = HasAction.AUTOMATIC_ACTION_DONE;
-
+        figureLocationMock2.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
         assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
 
         figureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
@@ -102,6 +98,12 @@ public class PlaceFiguresStateTest {
         assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
     }
 
+
+    private ActionResult placeFigures(){
+
+        return placeFiguresState.placeFigures(new PlayerOrder(0,1),Location.BUILDING_TILE1,1);
+
+    }
 
     @Test
     public void testPlaceFigures() {
