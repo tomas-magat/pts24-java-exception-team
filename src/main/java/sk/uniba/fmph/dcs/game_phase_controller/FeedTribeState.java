@@ -4,15 +4,14 @@ import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class FeedTribeState implements InterfaceGamePhaseState{
 
-    private Map<PlayerOrder, InterfaceFeedTribe> playerBoardFood;
+    private Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe;
 
-    private FeedTribeState(Map<PlayerOrder, InterfaceFeedTribe> playerBoardFood){
+    public FeedTribeState(Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe){
 
-        this.playerBoardFood = playerBoardFood;
+        this.playerBoardFeedTribe = playerBoardFeedTribe;
     }
     @Override
     public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
@@ -45,23 +44,14 @@ public class FeedTribeState implements InterfaceGamePhaseState{
     @Override
     public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
 
-        if(playerBoardFood.get(player).isTribeFed()){
-
-            return ActionResult.FAILURE;
-        }
-
-        if(playerBoardFood.get(player).doNotFeedThisTurn()){
-            return ActionResult.FAILURE;
-        }
-
-        return playerBoardFood.get(player).feedTribe(resources.toArray(new Effect[0]))?ActionResult.ACTION_DONE:ActionResult.FAILURE;
+        return playerBoardFeedTribe.get(player).feedTribe(resources.toArray(new Effect[0]))?ActionResult.ACTION_DONE:ActionResult.FAILURE;
 
     }
 
     @Override
     public ActionResult doNotFeedThisTurn(PlayerOrder player) {
 
-        return ActionResult.FAILURE;
+        return playerBoardFeedTribe.get(player).doNotFeedThisTurn()?ActionResult.ACTION_DONE:ActionResult.FAILURE;
     }
 
     @Override
@@ -73,11 +63,11 @@ public class FeedTribeState implements InterfaceGamePhaseState{
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
 
-        if(playerBoardFood.get(player).isTribeFed()){
+        if(playerBoardFeedTribe.get(player).isTribeFed()){
             return HasAction.NO_ACTION_POSSIBLE;
         }
 
-        if(playerBoardFood.get(player).feedTribeIfEnoughFood()){
+        if(playerBoardFeedTribe.get(player).feedTribeIfEnoughFood()){
 
             return HasAction.AUTOMATIC_ACTION_DONE;
         }
