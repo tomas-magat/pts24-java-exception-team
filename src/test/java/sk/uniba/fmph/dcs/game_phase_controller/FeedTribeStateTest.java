@@ -15,28 +15,30 @@ import java.util.Map;
 class MockInterfaceFeedTribe implements InterfaceFeedTribe{
 
     List<Boolean> expectedBoolean;
+    boolean isTribeFedExpectedBoolean;
+    boolean feedTribeIfEnoughFoodExpectedBoolean;
     @Override
     public boolean feedTribeIfEnoughFood() {
 
-        return expectedBoolean.remove(0);
+        return feedTribeIfEnoughFoodExpectedBoolean;
     }
 
     @Override
     public boolean feedTribe(Effect[] resources) {
 
-        return expectedBoolean.remove(0);
+        return expectedBoolean.removeFirst();
     }
 
     @Override
     public boolean doNotFeedThisTurn() {
 
-        return expectedBoolean.remove(0);
+        return expectedBoolean.removeFirst();
     }
 
     @Override
     public boolean isTribeFed() {
 
-        return expectedBoolean.remove(0);
+        return isTribeFedExpectedBoolean;
     }
 }
 
@@ -59,6 +61,12 @@ public class FeedTribeStateTest {
     private void setExpectedList(List<Boolean> list){
 
         mockInterfaceFeedTribe.expectedBoolean = new ArrayList<>(list);
+    }
+
+    private void setExpectedAutomaticAction(List<Boolean> list){
+
+        mockInterfaceFeedTribe.isTribeFedExpectedBoolean = list.get(0);
+        mockInterfaceFeedTribe.feedTribeIfEnoughFoodExpectedBoolean = list.get(1);
     }
 
     private ActionResult feedTribe(){
@@ -103,15 +111,15 @@ public class FeedTribeStateTest {
     @Test
     public void testTryToMakeAutomaticAction() {
 
-        setExpectedList(List.of(true, true, true));
+        setExpectedAutomaticAction(List.of(true, true));
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
 
-        setExpectedList(List.of(false, true, true));
+        setExpectedAutomaticAction(List.of(false, true));
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
 
-        setExpectedList(List.of(false, false, true));
+        setExpectedAutomaticAction(List.of(false, false));
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
     }

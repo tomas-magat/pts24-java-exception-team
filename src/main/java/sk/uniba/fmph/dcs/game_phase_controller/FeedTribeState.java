@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class FeedTribeState implements InterfaceGamePhaseState{
 
-    private Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe;
+    private final Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe;
 
     public FeedTribeState(Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe){
 
