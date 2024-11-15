@@ -14,7 +14,8 @@ import java.util.Map;
 
 class MockInterfaceFeedTribe implements InterfaceFeedTribe{
 
-    List<Boolean> expectedBoolean;
+    boolean feedTribeExpectedBoolean;
+    boolean doNotFeedThisTurnExpectedBoolean;
     boolean isTribeFedExpectedBoolean;
     boolean feedTribeIfEnoughFoodExpectedBoolean;
     @Override
@@ -26,13 +27,13 @@ class MockInterfaceFeedTribe implements InterfaceFeedTribe{
     @Override
     public boolean feedTribe(Effect[] resources) {
 
-        return expectedBoolean.removeFirst();
+        return feedTribeExpectedBoolean;
     }
 
     @Override
     public boolean doNotFeedThisTurn() {
 
-        return expectedBoolean.removeFirst();
+        return doNotFeedThisTurnExpectedBoolean;
     }
 
     @Override
@@ -58,11 +59,6 @@ public class FeedTribeStateTest {
         this.feedTribeState = new FeedTribeState(playerBoardFeedTribe);
     }
 
-    private void setExpectedList(List<Boolean> list){
-
-        mockInterfaceFeedTribe.expectedBoolean = new ArrayList<>(list);
-    }
-
     private void setExpectedAutomaticAction(List<Boolean> list){
 
         mockInterfaceFeedTribe.isTribeFedExpectedBoolean = list.get(0);
@@ -76,11 +72,11 @@ public class FeedTribeStateTest {
     @Test
     public void testFeedTribe() {
 
-        setExpectedList(List.of(false));
+        mockInterfaceFeedTribe.feedTribeExpectedBoolean = false;
 
         assertEquals(feedTribe(), ActionResult.FAILURE);
 
-        setExpectedList(List.of(true));
+        mockInterfaceFeedTribe.feedTribeExpectedBoolean = true;
 
         assertEquals(feedTribe(), ActionResult.ACTION_DONE);
     }
@@ -93,12 +89,11 @@ public class FeedTribeStateTest {
     @Test
     public void testDoNotFeedThisTurn() {
 
-        setExpectedList(List.of(false));
+        mockInterfaceFeedTribe.doNotFeedThisTurnExpectedBoolean = false;
 
         assertEquals(doNotFeedThisTurn(), ActionResult.FAILURE);
 
-        setExpectedList(List.of(true));
-
+        mockInterfaceFeedTribe.doNotFeedThisTurnExpectedBoolean = true;
         assertEquals(doNotFeedThisTurn(), ActionResult.ACTION_DONE);
     }
 
