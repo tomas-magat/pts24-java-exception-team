@@ -9,38 +9,36 @@ import java.util.List;
 import static org.junit.Assert.*;
 class FigureLocationMock implements InterfaceFigureLocation {
 
-    ActionResult expectedActionResult;
-    HasAction expectedHasAction;
     Boolean expectedBoolean;
 
     @Override
     public boolean placeFigures(PlayerOrder player, int figureCount) {
 
-        return expectedBoolean;
+        throw new AssertionError();
     }
 
     @Override
     public HasAction tryToPlaceFigures(PlayerOrder player, int count) {
 
-        return expectedHasAction;
+        throw new AssertionError();
     }
 
     @Override
     public ActionResult makeAction(PlayerOrder player, Effect[] inputResources, Effect[] outputResources) {
 
-        return expectedActionResult;
+        throw new AssertionError();
     }
 
     @Override
     public boolean skipAction(PlayerOrder player) {
 
-        return expectedBoolean;
+        throw new AssertionError();
     }
 
     @Override
     public HasAction tryToMakeAction(PlayerOrder player) {
 
-        return expectedHasAction;
+        throw new AssertionError();
 
     }
 
@@ -67,12 +65,13 @@ public class NewRoundStateTest {
     private FigureLocationMock figureLocationMock1;
     private FigureLocationMock figureLocationMock2;
     private NewRoundState newRoundState;
-    private NewTurnMock newTurnMock = new NewTurnMock();
+    private NewTurnMock newTurnMock;
     @Before
     public void setup(){
 
         figureLocationMock1 = new FigureLocationMock();
         figureLocationMock2 = new FigureLocationMock();
+        newTurnMock = new NewTurnMock();
 
         this.newRoundState = new NewRoundState(List.of(figureLocationMock1, figureLocationMock2), newTurnMock);
     }
@@ -101,9 +100,9 @@ public class NewRoundStateTest {
 
         figureLocationMock1.expectedBoolean = true;
         figureLocationMock2.expectedBoolean = false;
-        assertTrue(newTurnMock.newTurnCalled);
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
+        assertTrue(newTurnMock.newTurnCalled);
 
         figureLocationMock1.expectedBoolean = true;
         figureLocationMock2.expectedBoolean = true;
