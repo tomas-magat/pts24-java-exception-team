@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 class FigureLocationMock implements InterfaceFigureLocation {
 
-    ActionResult expectedActionResult;
     HasAction expectedHasAction;
     Boolean expectedBoolean;
 
@@ -30,26 +29,26 @@ class FigureLocationMock implements InterfaceFigureLocation {
     @Override
     public ActionResult makeAction(PlayerOrder player, Effect[] inputResources, Effect[] outputResources) {
 
-        return expectedActionResult;
+        throw new AssertionError();
     }
 
     @Override
     public boolean skipAction(PlayerOrder player) {
 
-        return expectedBoolean;
+        throw new AssertionError();
     }
 
     @Override
     public HasAction tryToMakeAction(PlayerOrder player) {
 
-        return expectedHasAction;
+        throw new AssertionError();
 
     }
 
     @Override
     public boolean newTurn() {
 
-        return expectedBoolean;
+        throw new AssertionError();
 
     }
 }
