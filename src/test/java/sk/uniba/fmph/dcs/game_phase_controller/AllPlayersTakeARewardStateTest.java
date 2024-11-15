@@ -62,5 +62,7 @@ public class AllPlayersTakeARewardStateTest {
         takeReward.expectedHasAction = HasAction.AUTOMATIC_ACTION_DONE;
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
+
+        takeReward.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 }

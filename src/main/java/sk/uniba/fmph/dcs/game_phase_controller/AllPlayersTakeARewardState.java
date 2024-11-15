@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
 
-    private InterfaceTakeReward takeReward;
+    private final InterfaceTakeReward takeReward;
     public AllPlayersTakeARewardState(InterfaceTakeReward takeReward){
 
         this.takeReward = takeReward;
