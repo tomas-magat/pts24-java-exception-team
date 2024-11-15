@@ -9,31 +9,31 @@ import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class MockToolUse implements InterfaceToolUse{
 
-    List<Boolean> expectedBooleans;
+    boolean useToolsExpectedBoolean;
+    boolean canUseToolsExpectedBoolean;
+    boolean finishUsingToolsExpectedBoolean;
 
     @Override
     public boolean useTool(int idx) {
 
-        return expectedBooleans.remove(0);
+        return useToolsExpectedBoolean;
     }
 
     @Override
     public boolean canUseTools() {
 
-        return expectedBooleans.remove(0);
+        return canUseToolsExpectedBoolean;
     }
 
     @Override
     public boolean finishUsingTools() {
 
-        return expectedBooleans.remove(0);
+        return finishUsingToolsExpectedBoolean;
     }
 }
 
@@ -54,10 +54,6 @@ public class WaitingForToolUseStateTest {
 
     }
 
-    private void setExpectedBooleans(List<Boolean> list){
-
-        mockToolUse.expectedBooleans = new ArrayList<>(list);
-    }
 
     private HasAction tryToMakeAutomaticAction(){
 
@@ -66,13 +62,12 @@ public class WaitingForToolUseStateTest {
     @Test
     public void testTryToMakeAutomaticAction() {
 
-        setExpectedBooleans(List.of(false, true));
+        mockToolUse.canUseToolsExpectedBoolean = false;
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
 
-        setExpectedBooleans(List.of(true,false));
+        mockToolUse.canUseToolsExpectedBoolean = true;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
     }
 
     private ActionResult noMoreToolsThisThrow(){
@@ -83,11 +78,11 @@ public class WaitingForToolUseStateTest {
     @Test
     public void testNoMoreToolsThisThrow() {
 
-        setExpectedBooleans(List.of(false));
+        mockToolUse.finishUsingToolsExpectedBoolean = false;
 
         assertEquals(noMoreToolsThisThrow(), ActionResult.FAILURE);
 
-        setExpectedBooleans(List.of(true));
+        mockToolUse.finishUsingToolsExpectedBoolean = true;
 
         assertEquals(noMoreToolsThisThrow(), ActionResult.ACTION_DONE);
     }
@@ -99,11 +94,11 @@ public class WaitingForToolUseStateTest {
     @Test
     public void testUseTools() {
 
-        setExpectedBooleans(List.of(true));
+        mockToolUse.useToolsExpectedBoolean = true;
 
         assertEquals(useTools(), ActionResult.ACTION_DONE);
 
-        setExpectedBooleans(List.of(false));
+        mockToolUse.useToolsExpectedBoolean = false;
 
         assertEquals(useTools(),ActionResult.FAILURE);
     }

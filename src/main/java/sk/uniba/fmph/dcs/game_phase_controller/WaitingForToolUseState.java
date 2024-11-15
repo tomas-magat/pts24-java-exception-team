@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class WaitingForToolUseState implements InterfaceGamePhaseState{
 
-    private Map<PlayerOrder, InterfaceToolUse> playerToolUse;
+    private final Map<PlayerOrder, InterfaceToolUse> playerToolUse;
     public WaitingForToolUseState(Map<PlayerOrder, InterfaceToolUse> playerToolUse){
 
         this.playerToolUse = playerToolUse;
