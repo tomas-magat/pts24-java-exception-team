@@ -11,7 +11,7 @@ public class GameEndStateTest {
 
     private GameEndState gameEndState;
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
 
         gameEndState = new GameEndState();
     }
