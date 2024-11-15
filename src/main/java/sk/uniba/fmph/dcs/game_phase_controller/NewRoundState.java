@@ -6,8 +6,8 @@ import java.util.Collection;
 
 public class NewRoundState implements InterfaceGamePhaseState{
 
-    private Collection<InterfaceFigureLocation> places;
-    private InterfaceNewTurn newTurn;
+    private final Collection<InterfaceFigureLocation> places;
+    private final InterfaceNewTurn newTurn;
 
     public NewRoundState(Collection<InterfaceFigureLocation> places, InterfaceNewTurn newTurn){
 
@@ -22,7 +22,7 @@ public class NewRoundState implements InterfaceGamePhaseState{
             if(!place.newTurn()){
 
                 newTurn.newTurn();
-                return  HasAction.AUTOMATIC_ACTION_DONE;
+                return HasAction.AUTOMATIC_ACTION_DONE;
             }
         }
 

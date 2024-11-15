@@ -54,9 +54,11 @@ class FigureLocationMock implements InterfaceFigureLocation {
 
 class NewTurnMock implements InterfaceNewTurn{
 
+    boolean newTurnCalled = false;
     @Override
     public void newTurn() {
 
+        newTurnCalled = true;
     }
 }
 
@@ -65,17 +67,20 @@ public class NewRoundStateTest {
     private FigureLocationMock figureLocationMock1;
     private FigureLocationMock figureLocationMock2;
     private NewRoundState newRoundState;
+    private NewTurnMock newTurnMock = new NewTurnMock();
     @Before
     public void setup(){
 
         figureLocationMock1 = new FigureLocationMock();
         figureLocationMock2 = new FigureLocationMock();
 
-        this.newRoundState = new NewRoundState(List.of(figureLocationMock1, figureLocationMock2), new NewTurnMock());
+        this.newRoundState = new NewRoundState(List.of(figureLocationMock1, figureLocationMock2), newTurnMock);
     }
 
     private HasAction tryToMakeAutomaticAction(){
 
+
+        newTurnMock.newTurnCalled = false;
         return newRoundState.tryToMakeAutomaticAction(new PlayerOrder(0,1));
     }
 
@@ -83,12 +88,20 @@ public class NewRoundStateTest {
     public void testTryToMakeAutomaticAction() {
 
         figureLocationMock1.expectedBoolean = false;
+        figureLocationMock2.expectedBoolean = false;
+
+        assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
+        assertTrue(newTurnMock.newTurnCalled);
+
+        figureLocationMock1.expectedBoolean = false;
         figureLocationMock2.expectedBoolean = true;
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
+        assertTrue(newTurnMock.newTurnCalled);
 
         figureLocationMock1.expectedBoolean = true;
         figureLocationMock2.expectedBoolean = false;
+        assertTrue(newTurnMock.newTurnCalled);
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
 
@@ -96,5 +109,6 @@ public class NewRoundStateTest {
         figureLocationMock2.expectedBoolean = true;
 
         assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
+        assertFalse(newTurnMock.newTurnCalled);
     }
 }
