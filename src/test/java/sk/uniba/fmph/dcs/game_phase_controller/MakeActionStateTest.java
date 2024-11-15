@@ -19,13 +19,13 @@ class FigureLocationMock implements InterfaceFigureLocation {
     @Override
     public boolean placeFigures(PlayerOrder player, int figureCount) {
 
-        return expectedBoolean;
+        throw new AssertionError();
     }
 
     @Override
     public HasAction tryToPlaceFigures(PlayerOrder player, int count) {
 
-        return expectedHasAction;
+        throw new AssertionError();
     }
 
     @Override
@@ -50,7 +50,7 @@ class FigureLocationMock implements InterfaceFigureLocation {
     @Override
     public boolean newTurn() {
 
-        return expectedBoolean;
+        throw new AssertionError();
 
     }
 }
