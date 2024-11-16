@@ -11,15 +11,23 @@ public class PlayerBoard implements InterfaceGetState {
     private TribeFedStatus fedStatus;
     private PlayerFigures figures;
 
-    public PlayerBoard() {
+    public PlayerBoard(
+            int points,
+            int houses,
+            PlayerCivilisationCards cards,
+            PlayerTools tools,
+            PlayerResourcesAndFood resourcesAndFood,
+            TribeFedStatus fedStatus,
+            PlayerFigures figures
+    ) {
         // Initial situation when the game begins
-        this.points = 0;
-        this.houses = 0;
-        this.cards = new PlayerCivilisationCards();
-        this.tools = new PlayerTools();
-        this.resourcesAndFood = new PlayerResourcesAndFood();
-        this.fedStatus = new TribeFedStatus();
-        this.figures = new PlayerFigures();
+        this.points = points;
+        this.houses = houses;
+        this.cards = cards;
+        this.tools = tools;
+        this.resourcesAndFood = resourcesAndFood;
+        this.fedStatus = fedStatus;
+        this.figures = figures;
     }
 
     public void addPoints(int points) {
@@ -35,8 +43,9 @@ public class PlayerBoard implements InterfaceGetState {
             houses,
             tools.getToolCount(),
             fedStatus.getFields(),
-            figures.getFigures()
+            figures.getTotalFigures()
         );
+        points += resourcesAndFood.numberOfResourcesForFinalPoints();
     }
 
     @Override

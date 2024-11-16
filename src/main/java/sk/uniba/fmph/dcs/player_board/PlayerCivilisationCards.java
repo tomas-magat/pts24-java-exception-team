@@ -9,7 +9,7 @@ public class PlayerCivilisationCards implements InterfaceGetState {
     private Map<EndOfGameEffect, Integer> endEffectCards; // stores cardEffects which are applied at the end of a game
 
     public PlayerCivilisationCards() {
-        endEffectCards = new HashMap<EndOfGameEffect, Integer>();
+        endEffectCards = new HashMap<>();
     }
 
     public void addEndOfGameEffects(List<EndOfGameEffect> effects) {
@@ -19,7 +19,6 @@ public class PlayerCivilisationCards implements InterfaceGetState {
     }
 
     public int calculateEndOfGameCivilisationCardPoints(int buildings, int tools, int fields, int figures) {
-        // TODO: write detailed test for this method
         int resultPoints = 0;
         List<Integer> greenCards = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
