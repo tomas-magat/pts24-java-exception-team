@@ -1,9 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
-import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.HasAction;
-import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
+import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +28,10 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
         return buildingState.toString();
     }
 
+    public ArrayList<PlayerOrder> getFigures() {
+        return figures;
+    }
+
     @Override
     public boolean placeFigures(Player player, int figureCount) {
         if(tryToPlaceFigures(player, figureCount) == HasAction.NO_ACTION_POSSIBLE) {
@@ -53,32 +54,46 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
 
     @Override
     public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        // TODO najkomplikovanejsie
-        // pay resources to acquire the building
-        // handle points scored
-        return null;
+        // TODO co su outputResources?
+        // TODO move scoring marker
+        boolean tookResourcesFromPlayer = player.getPlayerBoard().takeResources(inputResources.toArray(new Effect[]{}));
+        if(!tookResourcesFromPlayer) {
+            return ActionResult.FAILURE;
+        }
+        player.getPlayerBoard().giveEffect(inputResources.toArray(new Effect[]{}));
+        return ActionResult.ACTION_DONE;
     }
 
     @Override
     public boolean skipAction(Player player) {
-        // TODO
-        // "If a player cannot or does not want to pay the resources,
-        // she takes back her figure and leaves
-        // the building in place" - pravidla hry
-        return false;
+        for(PlayerOrder figure: figures) {
+            if(figure.getOrder() == player.getPlayerOrder().getOrder()) {
+                figures.remove(figure);
+                player.getPlayerBoard().takeFigures(-1); // ako inak urobit to, ze si hrac vezme spat figurku?
+                return true;
+            }
+        }
+        return false; // neuspesny skip
     }
 
     @Override
     public HasAction tryToMakeAction(Player player) {
-        // TODO
-        // prerekvizity pre makeAction()
-        return null;
+        // TODO ako checknut ze Player ma dostatok resources na action?
+        boolean playerFigureOnTile = false;
+        for(PlayerOrder figure: figures) {
+            if(figure.getOrder() == player.getPlayerOrder().getOrder()) {
+                playerFigureOnTile = true;
+                break;
+            }
+        }
+        if(!playerFigureOnTile || skipAction(player)) {
+            return HasAction.NO_ACTION_POSSIBLE;
+        }
+        return HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 
     @Override
     public boolean newTurn() {
-        // TODO
-        // check ci to staci takto
         return false;
     }
 }
