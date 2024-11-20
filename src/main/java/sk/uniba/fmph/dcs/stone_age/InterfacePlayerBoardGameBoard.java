@@ -18,4 +18,6 @@ public interface InterfacePlayerBoardGameBoard {
     boolean hasSufficientTools(int goal);
 
     OptionalInt useTool(int idx);
+
+    boolean addNewFigure(); // increment totalFigures
 }
