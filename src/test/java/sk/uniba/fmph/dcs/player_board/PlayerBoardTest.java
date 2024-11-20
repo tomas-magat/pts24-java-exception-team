@@ -13,7 +13,6 @@ import static org.junit.Assert.assertEquals;
 class MockPlayerResourcesAndFood implements InterfacePlayerResourcesAndFood {
     private int expectedResources;
 
-
     @Override
     public int numberOfResourcesForFinalPoints() {
         return expectedResources;
