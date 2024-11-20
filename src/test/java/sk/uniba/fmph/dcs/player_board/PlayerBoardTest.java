@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-class MockPlayerResourcesAndFood implements PlayerResourcesAndFood {
+class MockPlayerResourcesAndFood implements InterfacePlayerResourcesAndFood {
     private int expectedResources;
 
 
@@ -29,7 +29,7 @@ class MockPlayerResourcesAndFood implements PlayerResourcesAndFood {
     }
 }
 
-class MockTribeFedStatus implements TribeFedStatus {
+class MockTribeFedStatus implements InterfaceTribeFedStatus {
     private int expectedFields;
 
 
@@ -48,7 +48,7 @@ class MockTribeFedStatus implements TribeFedStatus {
     }
 }
 
-class MockPlayerFigures implements PlayerFigures {
+class MockPlayerFigures implements InterfacePlayerFigures {
     private int expectedFigures;
 
 

@@ -11,9 +11,9 @@ public class PlayerBoard implements InterfaceGetState {
     private int houses;
     private PlayerCivilisationCards cards;
     private PlayerTools tools;
-    private PlayerResourcesAndFood resourcesAndFood;
-    private TribeFedStatus fedStatus;
-    private PlayerFigures figures;
+    private InterfacePlayerResourcesAndFood resourcesAndFood;
+    private InterfaceTribeFedStatus fedStatus;
+    private InterfacePlayerFigures figures;
 
 
     public PlayerBoard(
@@ -21,9 +21,9 @@ public class PlayerBoard implements InterfaceGetState {
             int houses,
             PlayerCivilisationCards cards,
             PlayerTools tools,
-            PlayerResourcesAndFood resourcesAndFood,
-            TribeFedStatus fedStatus,
-            PlayerFigures figures
+            InterfacePlayerResourcesAndFood resourcesAndFood,
+            InterfaceTribeFedStatus fedStatus,
+            InterfacePlayerFigures figures
     ) {
         // Initial situation when the game begins
         this.points = points;
