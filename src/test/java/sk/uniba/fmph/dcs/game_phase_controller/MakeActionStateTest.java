@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-class FigureLocationMock implements InterfaceFigureLocation {
+class MakeFigureLocationMock implements InterfaceFigureLocation {
 
     ActionResult expectedActionResult;
     HasAction expectedHasAction;
@@ -59,14 +59,14 @@ class FigureLocationMock implements InterfaceFigureLocation {
 public class MakeActionStateTest {
 
     private MakeActionState makeActionState;
-    private FigureLocationMock figureLocationMock1;
-    private FigureLocationMock figureLocationMock2;
+    private MakeFigureLocationMock figureLocationMock1;
+    private MakeFigureLocationMock figureLocationMock2;
     @Before
     public void setup(){
 
         Map<Location, InterfaceFigureLocation> places;
-        figureLocationMock1 = new FigureLocationMock();
-        figureLocationMock2 = new FigureLocationMock();
+        figureLocationMock1 = new MakeFigureLocationMock();
+        figureLocationMock2 = new MakeFigureLocationMock();
         places = new HashMap<>();
         places.put(Location.BUILDING_TILE1, figureLocationMock1);
         places.put(Location.BUILDING_TILE2, figureLocationMock2);
