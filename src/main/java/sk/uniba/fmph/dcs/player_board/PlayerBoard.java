@@ -53,6 +53,10 @@ public class PlayerBoard implements InterfaceGetState {
         points += resourcesAndFood.numberOfResourcesForFinalPoints();
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     @Override
     public String state() {
         Map<String, String> state = Map.of(
