@@ -1,10 +1,10 @@
 package sk.uniba.fmph.dcs.player_board;
 
+import org.json.JSONObject;
+import sk.uniba.fmph.dcs.stone_age.EndOfGameEffect;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class PlayerTools implements InterfaceGetState {
     private List<Integer> tools;
@@ -36,7 +36,7 @@ public class PlayerTools implements InterfaceGetState {
 
         if (minToolNum < 4) {
             for (int i = 0; i < maxToolCount; i++) {
-                if (tools.get(i) == minToolNum) tools.set(i, minToolNum++);
+                if (tools.get(i) == minToolNum) {tools.set(i, minToolNum+1); break;}
             }
         } else {
             // temporary error handler
@@ -45,14 +45,12 @@ public class PlayerTools implements InterfaceGetState {
     }
 
     public void addSingleUseTool(int strength) {
-        // TODO: resolve how to store the single-use tool to be able to recognize
-        //  whether it was used or not (how do we know the client - player/test wants
-        //  to use THIS tool)
         singleUseTool = strength;
     }
     
     public void useTool(int index) {
         assert (index <= 3 && index >= 0);
+        // useTool(3) will use singleUseTool
         if (index == 3) singleUseTool = 0;
         else {
             if (!usedTools.get(index)) {
@@ -65,6 +63,8 @@ public class PlayerTools implements InterfaceGetState {
     }
 
     public boolean hasSufficientTools(int goal) {
+        // primary uses single-use tools
+        if (singleUseTool == goal) return true;
         for (int i = 0; i < maxToolCount; i++) {
             if (!usedTools.get(i) && tools.get(i) == goal) return true;
         }
@@ -72,6 +72,7 @@ public class PlayerTools implements InterfaceGetState {
     }
 
     public int getToolCount() {
+        // return value of total tool value count (for the final scoring)
         int resultCount = 0;
         for (int i = 0; i < maxToolCount; i++) {
             resultCount += tools.get(i);
@@ -81,7 +82,10 @@ public class PlayerTools implements InterfaceGetState {
 
     @Override
     public String state() {
-        // TODO: what should state strings look like?
-        return "";
+        Map<String, String> state = new HashMap<>();
+        for (int i = 0; i < maxToolCount; i++) {
+            state.put("tool slot "+i, tools.get(i)+" "+(usedTools.get(i) ? "used" : "unused"));
+        }
+        return new JSONObject(state).toString();
     }
 }
