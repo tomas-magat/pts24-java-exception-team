@@ -1,8 +1,12 @@
 package sk.uniba.fmph.dcs.player_board;
 
+import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 
+import java.util.Map;
+
 public class PlayerBoard implements InterfaceGetState {
+
     private int points;
     private int houses;
     private PlayerCivilisationCards cards;
@@ -10,6 +14,7 @@ public class PlayerBoard implements InterfaceGetState {
     private PlayerResourcesAndFood resourcesAndFood;
     private TribeFedStatus fedStatus;
     private PlayerFigures figures;
+
 
     public PlayerBoard(
             int points,
@@ -50,7 +55,15 @@ public class PlayerBoard implements InterfaceGetState {
 
     @Override
     public String state() {
-        // TODO
-        return "";
+        Map<String, String> state = Map.of(
+                "points", String.valueOf(points),
+                "houses", String.valueOf(houses),
+                "civilisation cards", cards.state(),
+                "tools", tools.state(),
+                "resources and food", resourcesAndFood.state(),
+                "tribe fed status", fedStatus.state(),
+                "figures", figures.state()
+        );
+        return new JSONObject(state).toString();
     }
 }

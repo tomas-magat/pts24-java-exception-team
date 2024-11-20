@@ -14,13 +14,26 @@ class MockPlayerResourcesAndFood implements PlayerResourcesAndFood {
     public int numberOfResourcesForFinalPoints() {
         return resources;
     }
+
+    @Override
+    public String state() {
+        return "";
+    }
 }
 
 class MockTribeFedStatus implements TribeFedStatus {
 
+    @Override
+    public String state() {
+        return "";
+    }
 }
 
 record MockPlayerFigures(int totalFigures) implements PlayerFigures {
+    @Override
+    public String state() {
+        return "";
+    }
 }
 
 

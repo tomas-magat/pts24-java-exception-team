@@ -1,5 +1,6 @@
 package sk.uniba.fmph.dcs.player_board;
 
+import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.EndOfGameEffect;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 
@@ -27,23 +28,24 @@ public class PlayerCivilisationCards implements InterfaceGetState {
 
         for (Map.Entry<EndOfGameEffect, Integer> card : endEffectCards.entrySet()) {
             switch (card.getKey()) {
-                case EndOfGameEffect.Farmer: resultPoints += card.getValue()*fields;
-                case EndOfGameEffect.ToolMaker: resultPoints += card.getValue()*tools;
-                case EndOfGameEffect.Builder: resultPoints += card.getValue()*buildings;
-                case EndOfGameEffect.Shaman: resultPoints += card.getValue()*figures;
-                case EndOfGameEffect.Art: greenCards.set(0, greenCards.get(0)+1);
-                case EndOfGameEffect.Medicine: greenCards.set(1, greenCards.get(1)+1);
-                case EndOfGameEffect.Music: greenCards.set(2, greenCards.get(2)+1);
-                case EndOfGameEffect.Pottery: greenCards.set(3, greenCards.get(3)+1);
-                case EndOfGameEffect.Sundial: greenCards.set(4, greenCards.get(4)+1);
-                case EndOfGameEffect.Transport: greenCards.set(5, greenCards.get(5)+1);
-                case EndOfGameEffect.Weaving: greenCards.set(6, greenCards.get(6)+1);
-                case EndOfGameEffect.Writing: greenCards.set(7, greenCards.get(7)+1);
+                case EndOfGameEffect.Farmer: resultPoints += card.getValue()*fields; break;
+                case EndOfGameEffect.ToolMaker: resultPoints += card.getValue()*tools; break;
+                case EndOfGameEffect.Builder: resultPoints += card.getValue()*buildings; break;
+                case EndOfGameEffect.Shaman: resultPoints += card.getValue()*figures; break;
+                case EndOfGameEffect.Art: greenCards.set(0, card.getValue()); break;
+                case EndOfGameEffect.Medicine: greenCards.set(1, card.getValue()); break;
+                case EndOfGameEffect.Music: greenCards.set(2, card.getValue()); break;
+                case EndOfGameEffect.Pottery: greenCards.set(3, card.getValue()); break;
+                case EndOfGameEffect.Sundial: greenCards.set(4, card.getValue()); break;
+                case EndOfGameEffect.Transport: greenCards.set(5, card.getValue()); break;
+                case EndOfGameEffect.Weaving: greenCards.set(6, card.getValue()); break;
+                case EndOfGameEffect.Writing: greenCards.set(7, card.getValue()); break;
             }
         }
 
-        int cardSetSize = 0;
+        int cardSetSize;
         do {
+            cardSetSize = 0;
             for (int i = 0; i < greenCards.size(); i++) {
                 if (greenCards.get(i) > 0) {
                     cardSetSize++;
@@ -58,7 +60,23 @@ public class PlayerCivilisationCards implements InterfaceGetState {
 
     @Override
     public String state() {
-        // TODO
-        return "";
+        Map<String, String> state = new HashMap<>();
+        for (Map.Entry<EndOfGameEffect, Integer> card : endEffectCards.entrySet()) {
+            switch (card.getKey()) {
+                case EndOfGameEffect.Farmer: state.put("farmers", String.valueOf(card.getValue()));
+                case EndOfGameEffect.ToolMaker: state.put("toolmakers", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Builder: state.put("builders", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Shaman: state.put("shamans", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Art: state.put("art", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Medicine: state.put("medicine", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Music: state.put("music", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Pottery: state.put("pottery", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Sundial: state.put("sundial", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Transport: state.put("transport", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Weaving: state.put("weaving", String.valueOf(card.getValue()));
+                case EndOfGameEffect.Writing: state.put("writing", String.valueOf(card.getValue()));
+            }
+        }
+        return new JSONObject(state).toString();
     }
 }
