@@ -47,18 +47,20 @@ public class PlayerTools implements InterfaceGetState {
         singleUseTool = strength;
     }
     
-    public void useTool(int index) {
+    public OptionalInt useTool(int index) {
         assert (index <= 3 && index >= 0);
         // useTool(3) will use singleUseTool
         if (index == 3) singleUseTool = 0;
         else {
             if (!usedTools.get(index)) {
                 usedTools.set(index, true);
+                return OptionalInt.of(tools.get(index));
             } else {
                 // temporary error handler
                 System.out.println("This tool has been already used");
             }
         }
+        return OptionalInt.empty();
     }
 
     public boolean hasSufficientTools(int goal) {
