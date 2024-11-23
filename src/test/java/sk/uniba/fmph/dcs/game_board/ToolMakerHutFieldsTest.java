@@ -146,11 +146,69 @@ public class ToolMakerHutFieldsTest {
         assertFalse(toolMakerHutFields.actionFields(player));
     }
 
+    // Hut Tests
+    @Test
+    public void testHutPlace1PlayerLimit() {
+        ToolMakerHutFields toolMakerHutFields = new ToolMakerHutFields();
+        playerBoardMock.expectedHasFigures = true;
+        playerBoardMock2.expectedHasFigures = true;
+        player = makePlayer(0,4, playerBoardMock);
+        player2 = makePlayer(1, 4, playerBoardMock2);
 
+        assertTrue(toolMakerHutFields.placeOnFields(player));
+        assertFalse(toolMakerHutFields.placeOnFields(player));
+        assertFalse(toolMakerHutFields.placeOnFields(player2));
+    }
+
+    @Test
+    public void testHutPlaceNotEnoughFigures() {
+        ToolMakerHutFields toolMakerHutFields = new ToolMakerHutFields();
+        playerBoardMock.expectedHasFigures = false;
+        playerBoardMock2.expectedHasFigures = true;
+        player = makePlayer(0,4, playerBoardMock);
+        player2 = makePlayer(1, 4, playerBoardMock2);
+
+        assertFalse(toolMakerHutFields.placeOnToolMaker(player));
+        assertTrue(toolMakerHutFields.placeOnToolMaker(player2));
+        assertFalse(toolMakerHutFields.placeOnToolMaker(player2));
+    }
+
+
+    @Test
+    public void testHutActionIncorrectPlayer() {
+        ToolMakerHutFields toolMakerHutFields = new ToolMakerHutFields();
+        playerBoardMock.expectedHasFigures = true;
+        playerBoardMock.addNewFigureCalled = false;
+        playerBoardMock2.expectedHasFigures = true;
+        playerBoardMock2.addNewFigureCalled = false;
+        player = makePlayer(0,4, playerBoardMock);
+        player2 = makePlayer(1, 4, playerBoardMock2);
+
+        assertFalse(toolMakerHutFields.actionHut(player));
+        assertFalse(playerBoardMock.addNewFigureCalled);
+
+        toolMakerHutFields.placeOnHut(player);
+        assertFalse(toolMakerHutFields.actionHut(player2));
+        assertFalse(playerBoardMock2.addNewFigureCalled);
+        assertTrue(toolMakerHutFields.actionHut(player));
+        assertTrue(playerBoardMock.addNewFigureCalled);
+    }
+
+    @Test
+    public void testHutActionCalledTwice() {
+        ToolMakerHutFields toolMakerHutFields = new ToolMakerHutFields();
+        playerBoardMock.expectedHasFigures = true;
+        playerBoardMock.addNewFigureCalled = false;
+        player = makePlayer(0,4, playerBoardMock);
+
+        toolMakerHutFields.placeOnHut(player);
+        assertTrue(toolMakerHutFields.actionHut(player));
+        assertFalse(toolMakerHutFields.actionHut(player));
+    }
 
     private static class PlayerBoardMock implements InterfacePlayerBoardGameBoard {
         public boolean expectedHasFigures;
-        public boolean effectToolCalled, effectFieldCalled;
+        public boolean effectToolCalled, effectFieldCalled, addNewFigureCalled;
         public PlayerBoardMock() {
 
         }
@@ -200,6 +258,7 @@ public class ToolMakerHutFieldsTest {
 
         @Override
         public boolean addNewFigure() {
+            addNewFigureCalled = true;
             return false;
         }
     }

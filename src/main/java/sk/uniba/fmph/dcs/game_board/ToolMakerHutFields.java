@@ -59,10 +59,11 @@ public class ToolMakerHutFields implements InterfaceGetState {
     }
 
     public boolean actionHut(Player player) {
+        if (!hutFigures.contains(player.getPlayerOrder())) return false;
         player.getPlayerBoard().takeFigures(-2);
         player.getPlayerBoard().addNewFigure();
         hutFigures.clear();
-        return false;
+        return true;
     }
 
     public boolean canPlaceOnHut(Player player) {
