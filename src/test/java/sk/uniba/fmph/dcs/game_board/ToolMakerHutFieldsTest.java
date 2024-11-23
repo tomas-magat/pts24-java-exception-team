@@ -131,5 +131,10 @@ public class ToolMakerHutFieldsTest {
         public OptionalInt useTool(int idx) {
             return null;
         }
+
+        @Override
+        public boolean addNewFigure() {
+            return false;
+        }
     }
 }

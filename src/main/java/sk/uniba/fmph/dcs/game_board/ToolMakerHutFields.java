@@ -34,10 +34,10 @@ public class ToolMakerHutFields implements InterfaceGetState {
     }
 
     public boolean actionToolMaker(Player player) {
-        // TODO
         if (!toolMakerFigures.contains(player.getPlayerOrder())) return false;
         player.getPlayerBoard().takeFigures(-1);
         player.getPlayerBoard().giveEffect(new Effect[] {Effect.TOOL});
+        toolMakerFigures.clear();
         return true;
     }
 
@@ -59,9 +59,9 @@ public class ToolMakerHutFields implements InterfaceGetState {
     }
 
     public boolean actionHut(Player player) {
-        // TODO
         player.getPlayerBoard().takeFigures(-2);
-        // este treba zvysit totalFigures, kedze hrac ma ziskat figurku navyse
+        player.getPlayerBoard().addNewFigure();
+        hutFigures.clear();
         return false;
     }
 
@@ -84,6 +84,7 @@ public class ToolMakerHutFields implements InterfaceGetState {
         if (!fieldsFigures.contains(player.getPlayerOrder())) return false;
         player.getPlayerBoard().takeFigures(-1);
         player.getPlayerBoard().giveEffect(new Effect[] {Effect.FIELD});
+        fieldsFigures.clear();
         return true;
     }
 
