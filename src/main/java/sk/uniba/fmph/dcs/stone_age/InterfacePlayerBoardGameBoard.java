@@ -19,5 +19,5 @@ public interface InterfacePlayerBoardGameBoard {
 
     OptionalInt useTool(int idx);
 
-    boolean addNewFigure();
+    boolean addNewFigure(); // increment totalFigures
 }
