@@ -3,29 +3,34 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class GameEndState implements InterfaceGamePhaseState{
+public class FeedTribeState implements InterfaceGamePhaseState{
 
-    @Override
-    public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
+    private final Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe;
 
-        return HasAction.WAITING_FOR_PLAYER_ACTION;
+    public FeedTribeState(Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe){
+
+        this.playerBoardFeedTribe = playerBoardFeedTribe;
     }
-
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
+    public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
 
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult doNotFeedThisTurn(PlayerOrder player) {
-
+    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
+    public ActionResult skipAction(PlayerOrder player, Location location) {
+        return ActionResult.FAILURE;
+    }
+
+    @Override
+    public ActionResult useTools(PlayerOrder player, int toolIndex) {
 
         return ActionResult.FAILURE;
     }
@@ -37,26 +42,36 @@ public class GameEndState implements InterfaceGamePhaseState{
     }
 
     @Override
-    public ActionResult useTools(PlayerOrder player, int toolIndex) {
+    public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
 
-        return ActionResult.FAILURE;
+        return playerBoardFeedTribe.get(player).feedTribe(resources.toArray(new Effect[0]))?ActionResult.ACTION_DONE:ActionResult.FAILURE;
+
     }
 
     @Override
-    public ActionResult skipAction(PlayerOrder player, Location location) {
+    public ActionResult doNotFeedThisTurn(PlayerOrder player) {
 
-        return ActionResult.FAILURE;
+        return playerBoardFeedTribe.get(player).doNotFeedThisTurn()?ActionResult.ACTION_DONE:ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-
+    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
         return ActionResult.FAILURE;
+
     }
 
     @Override
-    public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
+    public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
 
-        return ActionResult.FAILURE;
+        if(playerBoardFeedTribe.get(player).isTribeFed()){
+            return HasAction.NO_ACTION_POSSIBLE;
+        }
+
+        if(playerBoardFeedTribe.get(player).feedTribeIfEnoughFood()){
+
+            return HasAction.AUTOMATIC_ACTION_DONE;
+        }
+
+        return HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 }
