@@ -7,7 +7,7 @@ import sk.uniba.fmph.dcs.stone_age.*;
 import java.util.List;
 
 import static org.junit.Assert.*;
-class FigureLocationMock implements InterfaceFigureLocation {
+class RoundFigureLocationMock implements InterfaceFigureLocation {
 
     Boolean expectedBoolean;
 
@@ -62,15 +62,15 @@ class NewTurnMock implements InterfaceNewTurn{
 
 public class NewRoundStateTest {
 
-    private FigureLocationMock figureLocationMock1;
-    private FigureLocationMock figureLocationMock2;
+    private RoundFigureLocationMock figureLocationMock1;
+    private RoundFigureLocationMock figureLocationMock2;
     private NewRoundState newRoundState;
     private NewTurnMock newTurnMock;
     @Before
     public void setup(){
 
-        figureLocationMock1 = new FigureLocationMock();
-        figureLocationMock2 = new FigureLocationMock();
+        figureLocationMock1 = new RoundFigureLocationMock();
+        figureLocationMock2 = new RoundFigureLocationMock();
         newTurnMock = new NewTurnMock();
 
         this.newRoundState = new NewRoundState(List.of(figureLocationMock1, figureLocationMock2), newTurnMock);
