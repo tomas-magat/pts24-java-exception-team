@@ -32,4 +32,9 @@ public final class SimpleBuilding implements Building {
         }
         return OptionalInt.of(sum);
     }
+
+    @Override
+    public String state() {
+        return ""; // nebolo to tu, tak som to tu pridal
+    }
 }
