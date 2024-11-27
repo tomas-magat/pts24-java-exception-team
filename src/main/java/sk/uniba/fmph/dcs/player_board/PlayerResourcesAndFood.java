@@ -26,7 +26,7 @@ public class PlayerResourcesAndFood {
             }
         }
 
-        return false;
+        return true;
     }
 
     public boolean takeResources(List<Effect> resources) {
@@ -87,5 +87,9 @@ public class PlayerResourcesAndFood {
                 res.put(e, res.get(e) + 1);
         }
         return res;
+    }
+
+    public void setResources(Map<Effect, Integer> resources) {
+        this.resources = resources;
     }
 }
