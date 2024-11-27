@@ -3,13 +3,25 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class GameEndState implements InterfaceGamePhaseState{
+public class WaitingForToolUseState implements InterfaceGamePhaseState{
+
+    private final Map<PlayerOrder, InterfaceToolUse> playerToolUse;
+    public WaitingForToolUseState(Map<PlayerOrder, InterfaceToolUse> playerToolUse){
+
+        this.playerToolUse = playerToolUse;
+    }
 
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
 
-        return HasAction.WAITING_FOR_PLAYER_ACTION;
+        if(playerToolUse.get(player).canUseTools()){
+
+            return HasAction.WAITING_FOR_PLAYER_ACTION;
+        }
+
+        return HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
@@ -33,13 +45,13 @@ public class GameEndState implements InterfaceGamePhaseState{
     @Override
     public ActionResult noMoreToolsThisThrow(PlayerOrder player) {
 
-        return ActionResult.FAILURE;
+        return playerToolUse.get(player).finishUsingTools()?ActionResult.ACTION_DONE:ActionResult.FAILURE;
     }
 
     @Override
     public ActionResult useTools(PlayerOrder player, int toolIndex) {
 
-        return ActionResult.FAILURE;
+        return playerToolUse.get(player).useTool(toolIndex)?ActionResult.ACTION_DONE:ActionResult.FAILURE;
     }
 
     @Override
