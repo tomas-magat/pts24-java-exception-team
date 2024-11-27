@@ -35,6 +35,7 @@ public final class SimpleBuilding implements Building {
 
     @Override
     public String state() {
-        return ""; // nebolo to tu, tak som to tu pridal
+        // TODO
+        return null;
     }
 }
