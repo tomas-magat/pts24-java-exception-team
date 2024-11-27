@@ -17,8 +17,12 @@ public class ResourceSource {
     private int maxFigureColours;
     private List<PlayerOrder> figures;
 
-    public ResourceSource() {
+    public ResourceSource(String name, Effect resource, int maxFigures, int maxFigureColours) {
         figures = new ArrayList<>();
+        this.name = name;
+        this.resource = resource;
+        this.maxFigures = maxFigures;
+        this.maxFigureColours = maxFigureColours;
     }
 
     public String state() {
