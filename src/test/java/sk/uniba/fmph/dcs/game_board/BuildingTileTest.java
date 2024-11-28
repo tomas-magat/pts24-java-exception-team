@@ -3,9 +3,7 @@ package sk.uniba.fmph.dcs.game_board;
 import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.*;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.OptionalInt;
+import java.util.*;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -62,11 +60,12 @@ public class BuildingTileTest {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         figures.add(new PlayerOrder(4, 6));
         BuildingTile buildingTile = new BuildingTile(figures);
-        Map<String, String> expectedStateMap = Map.of(
-                "building tile state", "occupied",
-                "player count", String.valueOf(1),
-                "player", String.valueOf(4)
-        );
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "occupied");
+        expectedStateMap.put("player count", String.valueOf(1));
+        expectedStateMap.put("player", String.valueOf(4));
+
         String expectedState = new JSONObject(expectedStateMap).toString();
         assertEquals(buildingTile.state(), expectedState);
     }
@@ -75,10 +74,11 @@ public class BuildingTileTest {
     public void testEmptyState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         BuildingTile buildingTile = new BuildingTile(figures);
-        Map<String, String> expectedStateMap = Map.of(
-                "building tile state", "unoccupied",
-                "player count", String.valueOf(0)
-        );
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("player count", String.valueOf(0));
+
         String expectedState = new JSONObject(expectedStateMap).toString();
         assertEquals(buildingTile.state(), expectedState);
     }
