@@ -1,5 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
+import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.CivilisationCard;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
@@ -64,6 +65,7 @@ public class GameBoard implements InterfaceGetState {
                 "CivilizationCardPlace1", civilizationCardPlace1.state(),
                 "RewardMenu", rewardMenu.state(),
                 "BuildingTile", buildingTile.state());
+        return new JSONObject(state).toString();
     }
 
     public ToolMakerHutFields getToolMakerHutFields() {
