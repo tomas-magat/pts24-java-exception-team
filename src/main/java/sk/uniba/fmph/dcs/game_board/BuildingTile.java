@@ -56,12 +56,12 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
 
     @Override
     public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        // TODO move scoring marker – na toto potrebujem class GameBoard s konkretnou verziou Stringu state
         boolean tookResourcesFromPlayer = player.getPlayerBoard().takeResources(inputResources.toArray(new Effect[]{}));
         if(!tookResourcesFromPlayer) {
             return ActionResult.FAILURE;
         }
         player.getPlayerBoard().giveEffect(inputResources.toArray(new Effect[]{}));
+        player.getPlayerBoard().giveEffect(new Effect[]{Effect.BUILDING});
         return ActionResult.ACTION_DONE;
     }
 
