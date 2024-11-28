@@ -3,10 +3,7 @@ package sk.uniba.fmph.dcs.game_board;
 import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BuildingTile implements InterfaceFigureLocationInternal {
     private final ArrayList<PlayerOrder> figures;
@@ -24,10 +21,9 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
             occupiedState.append("occupied");
         }
 
-        Map<String, String> buildingState = new HashMap<>(Map.of(
-                "building tile state", occupiedState.toString(),
-                "player count", String.valueOf(figures.size())
-        ));
+        Map<String, String> buildingState = new LinkedHashMap<>();
+        buildingState.put("building tile state", occupiedState.toString());
+        buildingState.put("player count", String.valueOf(figures.size()));
         for(PlayerOrder figure: figures) {
             buildingState.put("player", String.valueOf(figure.getOrder()));
         }
