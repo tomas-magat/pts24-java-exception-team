@@ -1,5 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
+import sk.uniba.fmph.dcs.stone_age.CivilisationCard;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 
@@ -14,24 +15,37 @@ public class GameBoard implements InterfaceGetState {
     private CivilizationCardPlace civilizationCardPlace1, civilizationCardPlace2, civilizationCardPlace3, civilizationCardPlace4;
     private CivilizationCardDeck civilizationCardDeck;
     private RewardMenu rewardMenu;
-    private BuildingTile buildingTile;
+    private BuildingTile buildingTile; // neviem ci staci 1 instancia alebo ako je to myslene
     private List<Player> players;
 
-    public GameBoard(List<Player> players) {
+    public GameBoard(List<Player> players,
+                     ToolMakerHutFields toolMakerHutFields,
+                     ResourceSource resourceSourceForest,
+                     ResourceSource resourceSourceClay,
+                     ResourceSource resourceSourceQuarry,
+                     ResourceSource resourceSourceRiver,
+                     CurrentThrow currentThrow,
+                     CivilizationCardPlace civilizationCardPlace1,
+                     CivilizationCardPlace civilizationCardPlace2,
+                     CivilizationCardPlace civilizationCardPlace3,
+                     CivilizationCardPlace civilizationCardPlace4,
+                     CivilizationCardDeck civilizationCardDeck,
+                     RewardMenu rewardMenu,
+                     BuildingTile buildingTile) {
         this.players = players;
-        toolMakerHutFields = new ToolMakerHutFields();
-        resourceSourceForest = new ResourceSource("Forest", Effect.WOOD);
-        resourceSourceClay = new ResourceSource("Clay mound", Effect.CLAY);
-        resourceSourceQuarry = new ResourceSource("Quarry", Effect.STONE);
-        resourceSourceRiver = new ResourceSource("River", Effect.GOLD);
-        currentThrow = new CurrentThrow();
-        civilizationCardPlace1 = new CivilizationCardPlace();
-        civilizationCardPlace2 = new CivilizationCardPlace();
-        civilizationCardPlace3 = new CivilizationCardPlace();
-        civilizationCardPlace4 = new CivilizationCardPlace();
-        civilizationCardDeck = new CivilizationCardDeck();
-        rewardMenu = new RewardMenu(players);
-        buildingTile = new BuildingTile();
+        this.toolMakerHutFields = toolMakerHutFields;
+        this.resourceSourceForest = resourceSourceForest;
+        this.resourceSourceClay = resourceSourceClay;
+        this.resourceSourceQuarry = resourceSourceQuarry;
+        this.resourceSourceRiver = resourceSourceRiver;
+        this.currentThrow = currentThrow;
+        this.civilizationCardPlace1 = civilizationCardPlace1;
+        this.civilizationCardPlace2 = civilizationCardPlace2;
+        this.civilizationCardPlace3 = civilizationCardPlace3;
+        this.civilizationCardPlace4 = civilizationCardPlace4;
+        this.civilizationCardDeck = civilizationCardDeck;
+        this.rewardMenu = rewardMenu;
+        this.buildingTile = buildingTile;
     }
 
     @Override
