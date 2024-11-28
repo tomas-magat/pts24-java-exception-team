@@ -86,7 +86,7 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
                 break;
             }
         }
-        if(!playerFigureOnTile || skipAction(player)) {
+        if(!playerFigureOnTile) {
             return HasAction.NO_ACTION_POSSIBLE;
         }
         return HasAction.WAITING_FOR_PLAYER_ACTION;
