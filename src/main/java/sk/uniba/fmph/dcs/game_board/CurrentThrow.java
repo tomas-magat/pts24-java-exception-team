@@ -8,23 +8,61 @@ import java.util.*;
 
 public class CurrentThrow implements InterfaceCurrentThrow, InterfaceToolUse {
 
+    private static class Throw {
+
+        public int[] expectedResult;
+        public int[] throwDices(int dices) {
+            return expectedResult;
+        }
+    }
+
     private Effect throwsFor;
     private int throwResult;
+    private Throw throwDices;
+    private Player player;
+    private int throwSum, divBy;
 
-    public CurrentThrow() {
-
+    public CurrentThrow(Throw throwDices) {
+        this.throwDices = throwDices;
     }
 
     @Override
     public void initiate(Player player, Effect effect, int dices) {
         this.throwsFor = effect;
-        Random rnd = new Random();
+        this.player = player;
+
         List<Integer> list = new ArrayList<>();
+        int[] res = throwDices.throwDices(dices);
+        int sum = 0;
         for (int i = 0; i < dices; i++) {
-            list.add(rnd.nextInt(1, 7)); // upper bound is exclusive
+            sum += res[i];
         }
 
-        
+        int divBy = 1;
+        switch (effect) {
+            case FOOD:
+                divBy = 2;
+                break;
+            case WOOD:
+               divBy = 3;
+                break;
+            case CLAY:
+                divBy = 4;
+                break;
+            case STONE:
+                divBy = 5;
+                break;
+            case GOLD:
+                divBy = 6;
+                break;
+            default:
+                divBy = 1;
+                break;
+        }
+
+        this.throwSum = sum;
+        this.divBy = divBy;
+        this.throwResult = sum / divBy;
     }
 
     @Override
@@ -42,16 +80,24 @@ public class CurrentThrow implements InterfaceCurrentThrow, InterfaceToolUse {
 
     @Override
     public boolean useTool(int idx) {
-        return false;
+        if (!canUseTools()) return false;
+        if (!player.getPlayerBoard().hasSufficientTools(idx)) return false;
+
+        player.getPlayerBoard().useTool(idx);
+
+        this.throwSum += idx;
+        this.throwResult = this.throwSum / this.divBy;
+
+        return true;
     }
 
     @Override
     public boolean canUseTools() {
-        return false;
+        return throwsFor.isResourceOrFood();
     }
 
     @Override
     public boolean finishUsingTools() {
-        return false;
+        return false; // idk
     }
 }
