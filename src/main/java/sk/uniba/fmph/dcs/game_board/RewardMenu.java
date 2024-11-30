@@ -31,6 +31,10 @@ public class RewardMenu implements InterfaceTakeReward {
         players.forEach(player -> playersLeft.add(player.getPlayerOrder()));
     }
 
+    public int getPlayersCount() {
+        return players.size();
+    }
+
     public String state() {
         JSONObject state = new JSONObject();
 
