@@ -240,6 +240,21 @@ public class ResourceSourceTest {
         assertEquals(playerBoardMock1.takeFiguresAmount, 0);
     }
 
+    @Test
+    public void testSkipAction() {
+        ResourceSource resourceSource = new ResourceSource(currentThrow, "Forest", Effect.WOOD, 7, 4);
+        Collection<Effect> outputResources = new ArrayList<>();
+
+        playerBoardMock1.expectedHasFigures = true;
+        assertFalse(resourceSource.skipAction(player1));
+
+        assertTrue(resourceSource.placeFigures(player1, 3));
+        assertTrue(resourceSource.skipAction(player1));
+
+        assertEquals(resourceSource.makeAction(player1, null, outputResources), ActionResult.FAILURE);
+        assertFalse(resourceSource.skipAction(player1));
+    }
+
 
     private static class CurrentThrowMock implements InterfaceCurrentThrow {
         public int expectedThrowResult;
