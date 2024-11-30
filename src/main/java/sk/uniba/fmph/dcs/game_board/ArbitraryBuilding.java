@@ -4,6 +4,9 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 
 import java.util.Collection;
 import java.util.OptionalInt;
+import java.util.Map;
+
+import org.json.JSONObject;
 
 public class ArbitraryBuilding implements Building {
     private final int maxNumberOfResources;
@@ -14,7 +17,7 @@ public class ArbitraryBuilding implements Building {
 
     @Override
     public OptionalInt build(Collection<Effect> resources) {
-        if (resources == null || resources.isEmpty() || resources.size() < 1 || resources.size() > maxNumberOfResources) {
+        if (resources == null || resources.isEmpty() || resources.size() > maxNumberOfResources) {
             return OptionalInt.empty();
         }
 
@@ -30,6 +33,9 @@ public class ArbitraryBuilding implements Building {
 
     @Override
     public String state() {
-        return "";
+        Map<String, String> state = Map.of(
+                "building type", "ArbitraryBuilding",
+                "max resources", String.valueOf(maxNumberOfResources));
+        return new JSONObject(state).toString();
     }
 }
