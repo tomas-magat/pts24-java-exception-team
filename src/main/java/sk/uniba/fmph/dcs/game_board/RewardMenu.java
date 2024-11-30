@@ -16,12 +16,12 @@ public class RewardMenu implements InterfaceTakeReward {
     private final List<PlayerOrder> playersLeft; // players who haven't collected their reward yet
 
     public RewardMenu(final List<Effect> menu, final List<Player> players) {
-        this.menu = new ArrayList<>();
-        this.menu.addAll(menu);
         this.players = new ArrayList<>();
         this.players.addAll(players);
+
+        this.menu = new ArrayList<>();
         playersLeft = new ArrayList<>();
-        players.forEach(player -> playersLeft.add(player.getPlayerOrder()));
+        initiate(menu);
     }
 
     public void initiate(final List<Effect> menu) {
@@ -31,8 +31,8 @@ public class RewardMenu implements InterfaceTakeReward {
         players.forEach(player -> playersLeft.add(player.getPlayerOrder()));
     }
 
-    public int getPlayersCount() {
-        return players.size();
+    public int getPlayersLeftCount() {
+        return playersLeft.size();
     }
 
     public String state() {
@@ -79,7 +79,6 @@ public class RewardMenu implements InterfaceTakeReward {
         playersLeft.remove(player);
         menu.remove(reward);
         return true;
-
     }
 
     @Override
