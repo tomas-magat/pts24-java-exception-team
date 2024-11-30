@@ -35,12 +35,14 @@ public class ResourceSource implements InterfaceFigureLocationInternal {
         } else {
             figures.put(playerOrder, figureCount);
         }
+        player.getPlayerBoard().takeFigures(figureCount);
         return true;
     }
 
     @Override
     public HasAction tryToPlaceFigures(Player player, int count) {
         if (totalFigures() + count > maxFigures) return HasAction.NO_ACTION_POSSIBLE;
+        if (!player.getPlayerBoard().hasFigures(count)) return HasAction.NO_ACTION_POSSIBLE;
 
         PlayerOrder playerOrder = player.getPlayerOrder();
         if (figures.containsKey(playerOrder)) {
@@ -72,13 +74,19 @@ public class ResourceSource implements InterfaceFigureLocationInternal {
             i++;
         }
         player.getPlayerBoard().giveEffect(effects);
+        player.getPlayerBoard().takeFigures(-figures.get(player.getPlayerOrder()));
 
         return ActionResult.ACTION_DONE;
     }
 
     @Override
     public boolean skipAction(Player player) {
-        return false; // can resource acquiring be skipped?
+        // can resource acquiring be skipped?
+        if (!figures.containsKey(player.getPlayerOrder())) return false;
+        // return figures
+        player.getPlayerBoard().takeFigures(-figures.get(player.getPlayerOrder()));
+        figures.remove(player.getPlayerOrder());
+        return true;
     }
 
     @Override
