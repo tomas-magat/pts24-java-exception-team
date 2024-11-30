@@ -10,7 +10,7 @@ public class GamePhaseControllerFactory {
                                                                 Map<Location, InterfaceFigureLocation> places,
                                                                 Map<PlayerOrder, InterfaceFeedTribe> playerFeedTribe,
                                                                 Map<PlayerOrder, InterfaceNewTurn> playerNewTurn,
-                                                                Map<PlayerOrder, InterfaceToolUse> playerToolUse,
+                                                                InterfaceToolUse toolUse,
                                                                 InterfaceTakeReward takeReward,
                                                                 PlayerOrder startingPlayer) {
 
@@ -18,7 +18,7 @@ public class GamePhaseControllerFactory {
         MakeActionState makeActionState = new MakeActionState(places);
         FeedTribeState feedTribeState = new FeedTribeState(playerFeedTribe);
         NewRoundState newRoundState = new NewRoundState(places.values(),playerNewTurn);
-        WaitingForToolUseState waitingForToolUseState = new WaitingForToolUseState(playerToolUse);
+        WaitingForToolUseState waitingForToolUseState = new WaitingForToolUseState(toolUse);
         AllPlayersTakeARewardState allPlayersTakeARewardState = new AllPlayersTakeARewardState(takeReward);
         GameEndState gameEndState = new GameEndState();
 

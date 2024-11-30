@@ -4,18 +4,28 @@ import sk.uniba.fmph.dcs.stone_age.InterfaceToolUse;
 
 public class ToolUseMock implements InterfaceToolUse {
 
-    public boolean useToolsExpectedBoolean;
+    public boolean expectedUseTool;
     public boolean expectedCanUseTools;
     public boolean expectedFinishUsingTools;
+    public int maxToolsUses = Integer.MAX_VALUE;
 
     @Override
     public boolean useTool(int idx) {
 
-        return useToolsExpectedBoolean;
+        if(!expectedUseTool || maxToolsUses - 1 < 0) {
+            return false;
+        }
+
+        maxToolsUses--;
+        return true;
     }
 
     @Override
     public boolean canUseTools() {
+
+        if(maxToolsUses <= 0){
+            return false;
+        }
 
         return expectedCanUseTools;
     }
