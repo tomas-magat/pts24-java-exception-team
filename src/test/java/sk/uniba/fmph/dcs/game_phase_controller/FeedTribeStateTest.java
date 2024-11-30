@@ -2,6 +2,7 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import sk.uniba.fmph.dcs.game_phase_controller.mocks.FeedTribeMock;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import static org.junit.Assert.*;
@@ -11,57 +12,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-class MockInterfaceFeedTribe implements InterfaceFeedTribe{
-
-    boolean feedTribeExpectedBoolean;
-    boolean doNotFeedThisTurnExpectedBoolean;
-    boolean isTribeFedExpectedBoolean;
-    boolean feedTribeIfEnoughFoodExpectedBoolean;
-    @Override
-    public boolean feedTribeIfEnoughFood() {
-
-        return feedTribeIfEnoughFoodExpectedBoolean;
-    }
-
-    @Override
-    public boolean feedTribe(Effect[] resources) {
-
-        return feedTribeExpectedBoolean;
-    }
-
-    @Override
-    public boolean doNotFeedThisTurn() {
-
-        return doNotFeedThisTurnExpectedBoolean;
-    }
-
-    @Override
-    public boolean isTribeFed() {
-
-        return isTribeFedExpectedBoolean;
-    }
-}
-
 public class FeedTribeStateTest {
 
     private FeedTribeState feedTribeState;
-    private MockInterfaceFeedTribe mockInterfaceFeedTribe;
+    private FeedTribeMock feedTribeMock;
     private PlayerOrder player;
     @Before
     public void setUp() {
 
         this.player = new PlayerOrder(0,1);
-        this.mockInterfaceFeedTribe = new MockInterfaceFeedTribe();
+        this.feedTribeMock = new FeedTribeMock();
 
         Map<PlayerOrder, InterfaceFeedTribe> playerBoardFeedTribe = new HashMap<>();
-        playerBoardFeedTribe.put(player, mockInterfaceFeedTribe);
+        playerBoardFeedTribe.put(player, feedTribeMock);
         this.feedTribeState = new FeedTribeState(playerBoardFeedTribe);
     }
 
     private void setExpectedAutomaticAction(List<Boolean> list){
 
-        mockInterfaceFeedTribe.isTribeFedExpectedBoolean = list.get(0);
-        mockInterfaceFeedTribe.feedTribeIfEnoughFoodExpectedBoolean = list.get(1);
+        feedTribeMock.expectedIsTribeFed = list.get(0);
+        feedTribeMock.expectedFeedTribeIfEnoughFood = list.get(1);
     }
 
     private ActionResult feedTribe(){
@@ -71,13 +41,13 @@ public class FeedTribeStateTest {
     @Test
     public void testFeedTribe() {
 
-        mockInterfaceFeedTribe.feedTribeExpectedBoolean = false;
+        feedTribeMock.expectedFeedTribe = false;
 
-        assertEquals(feedTribe(), ActionResult.FAILURE);
+        assertEquals(ActionResult.FAILURE, feedTribe());
 
-        mockInterfaceFeedTribe.feedTribeExpectedBoolean = true;
+        feedTribeMock.expectedFeedTribe = true;
 
-        assertEquals(feedTribe(), ActionResult.ACTION_DONE);
+        assertEquals(ActionResult.ACTION_DONE, feedTribe());
     }
 
     private ActionResult doNotFeedThisTurn(){
@@ -88,12 +58,12 @@ public class FeedTribeStateTest {
     @Test
     public void testDoNotFeedThisTurn() {
 
-        mockInterfaceFeedTribe.doNotFeedThisTurnExpectedBoolean = false;
+        feedTribeMock.expectedDoNotFeedThisTurn = false;
 
-        assertEquals(doNotFeedThisTurn(), ActionResult.FAILURE);
+        assertEquals(ActionResult.FAILURE, doNotFeedThisTurn());
 
-        mockInterfaceFeedTribe.doNotFeedThisTurnExpectedBoolean = true;
-        assertEquals(doNotFeedThisTurn(), ActionResult.ACTION_DONE);
+        feedTribeMock.expectedDoNotFeedThisTurn = true;
+        assertEquals(ActionResult.ACTION_DONE, doNotFeedThisTurn());
     }
 
     private HasAction tryToMakeAutomaticAction(){
@@ -107,14 +77,14 @@ public class FeedTribeStateTest {
 
         setExpectedAutomaticAction(List.of(true, true));
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
 
         setExpectedAutomaticAction(List.of(false, true));
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
+        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
 
         setExpectedAutomaticAction(List.of(false, false));
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, tryToMakeAutomaticAction());
     }
 }

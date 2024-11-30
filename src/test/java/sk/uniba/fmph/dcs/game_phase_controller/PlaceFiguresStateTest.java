@@ -2,6 +2,7 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import sk.uniba.fmph.dcs.game_phase_controller.mocks.FigureLocationMock;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.HashMap;
@@ -9,64 +10,20 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-class PlaceFigureLocationMock implements InterfaceFigureLocation {
-
-    HasAction expectedHasAction;
-    Boolean expectedBoolean;
-
-    @Override
-    public boolean placeFigures(PlayerOrder player, int figureCount) {
-
-        return expectedBoolean;
-    }
-
-    @Override
-    public HasAction tryToPlaceFigures(PlayerOrder player, int count) {
-
-        return expectedHasAction;
-    }
-
-    @Override
-    public ActionResult makeAction(PlayerOrder player, Effect[] inputResources, Effect[] outputResources) {
-
-        throw new AssertionError();
-    }
-
-    @Override
-    public boolean skipAction(PlayerOrder player) {
-
-        throw new AssertionError();
-    }
-
-    @Override
-    public HasAction tryToMakeAction(PlayerOrder player) {
-
-        throw new AssertionError();
-
-    }
-
-    @Override
-    public boolean newTurn() {
-
-        throw new AssertionError();
-
-    }
-}
-
 public class PlaceFiguresStateTest {
 
     private PlaceFiguresState placeFiguresState;
-    private PlaceFigureLocationMock placeFigureLocationMock1;
-    private PlaceFigureLocationMock placeFigureLocationMock2;
+    private FigureLocationMock figureLocationMock1;
+    private FigureLocationMock figureLocationMock2;
 
     @Before
     public void setup(){
 
-        placeFigureLocationMock1 = new PlaceFigureLocationMock();
-        placeFigureLocationMock2 = new PlaceFigureLocationMock();
+        figureLocationMock1 = new FigureLocationMock();
+        figureLocationMock2 = new FigureLocationMock();
         Map<Location, InterfaceFigureLocation> places = new HashMap<>();
-        places.put(Location.BUILDING_TILE1, placeFigureLocationMock1);
-        places.put(Location.BUILDING_TILE2, placeFigureLocationMock2);
+        places.put(Location.BUILDING_TILE1, figureLocationMock1);
+        places.put(Location.BUILDING_TILE2, figureLocationMock2);
 
         this.placeFiguresState = new PlaceFiguresState(places);
     }
@@ -79,22 +36,21 @@ public class PlaceFiguresStateTest {
     @Test
     public void testTryToMakeAutomaticAction(){
 
-        placeFigureLocationMock1.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
-        placeFigureLocationMock2.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
-        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
+        figureLocationMock1.expectedTryToPlaceFigures = HasAction.WAITING_FOR_PLAYER_ACTION;
+        figureLocationMock2.expectedTryToPlaceFigures = HasAction.WAITING_FOR_PLAYER_ACTION;
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, tryToMakeAutomaticAction());
 
-        placeFigureLocationMock1.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
-        placeFigureLocationMock2.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
-        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
+        figureLocationMock1.expectedTryToPlaceFigures = HasAction.WAITING_FOR_PLAYER_ACTION;
+        figureLocationMock2.expectedTryToPlaceFigures = HasAction.NO_ACTION_POSSIBLE;
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, tryToMakeAutomaticAction());
 
-        placeFigureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
-        placeFigureLocationMock2.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
-        assertEquals(tryToMakeAutomaticAction(), HasAction.WAITING_FOR_PLAYER_ACTION);
+        figureLocationMock1.expectedTryToPlaceFigures = HasAction.NO_ACTION_POSSIBLE;
+        figureLocationMock2.expectedTryToPlaceFigures = HasAction.WAITING_FOR_PLAYER_ACTION;
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, tryToMakeAutomaticAction());
 
-        placeFigureLocationMock1.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
-        placeFigureLocationMock2.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
-
-        assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
+        figureLocationMock1.expectedTryToPlaceFigures = HasAction.NO_ACTION_POSSIBLE;
+        figureLocationMock2.expectedTryToPlaceFigures = HasAction.NO_ACTION_POSSIBLE;
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
     }
 
 
@@ -107,13 +63,11 @@ public class PlaceFiguresStateTest {
     @Test
     public void testPlaceFigures() {
 
-        placeFigureLocationMock1.expectedBoolean = false;
+        figureLocationMock1.expectedPlaceFigures = false;
+        assertEquals(ActionResult.FAILURE, placeFigures());
 
-        assertEquals(placeFigures(), ActionResult.FAILURE);
-
-        placeFigureLocationMock1.expectedBoolean = true;
-
-        assertEquals(placeFigures(), ActionResult.ACTION_DONE);
+        figureLocationMock1.expectedPlaceFigures = true;
+        assertEquals(ActionResult.ACTION_DONE, placeFigures());
 
 
     }
