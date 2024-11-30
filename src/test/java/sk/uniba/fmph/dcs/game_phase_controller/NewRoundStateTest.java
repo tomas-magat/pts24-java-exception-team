@@ -2,112 +2,76 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import sk.uniba.fmph.dcs.game_phase_controller.mocks.FigureLocationMock;
+import sk.uniba.fmph.dcs.game_phase_controller.mocks.NewTurnMock;
 import sk.uniba.fmph.dcs.stone_age.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
-class RoundFigureLocationMock implements InterfaceFigureLocation {
-
-    Boolean expectedBoolean;
-
-    @Override
-    public boolean placeFigures(PlayerOrder player, int figureCount) {
-
-        throw new AssertionError();
-    }
-
-    @Override
-    public HasAction tryToPlaceFigures(PlayerOrder player, int count) {
-
-        throw new AssertionError();
-    }
-
-    @Override
-    public ActionResult makeAction(PlayerOrder player, Effect[] inputResources, Effect[] outputResources) {
-
-        throw new AssertionError();
-    }
-
-    @Override
-    public boolean skipAction(PlayerOrder player) {
-
-        throw new AssertionError();
-    }
-
-    @Override
-    public HasAction tryToMakeAction(PlayerOrder player) {
-
-        throw new AssertionError();
-
-    }
-
-    @Override
-    public boolean newTurn() {
-
-        return expectedBoolean;
-
-    }
-}
-
-class NewTurnMock implements InterfaceNewTurn{
-
-    boolean newTurnCalled = false;
-    @Override
-    public void newTurn() {
-
-        newTurnCalled = true;
-    }
-}
 
 public class NewRoundStateTest {
 
-    private RoundFigureLocationMock figureLocationMock1;
-    private RoundFigureLocationMock figureLocationMock2;
+    private FigureLocationMock figureLocationMock1;
+    private FigureLocationMock figureLocationMock2;
     private NewRoundState newRoundState;
-    private NewTurnMock newTurnMock;
+    private List<NewTurnMock> newTurnMocks;
     @Before
     public void setup(){
 
-        figureLocationMock1 = new RoundFigureLocationMock();
-        figureLocationMock2 = new RoundFigureLocationMock();
-        newTurnMock = new NewTurnMock();
+        figureLocationMock1 = new FigureLocationMock();
+        figureLocationMock2 = new FigureLocationMock();
+        NewTurnMock newTurnMock1 = new NewTurnMock();
+        NewTurnMock newTurnMock2 = new NewTurnMock();
 
-        this.newRoundState = new NewRoundState(List.of(figureLocationMock1, figureLocationMock2), newTurnMock);
+        newTurnMocks = new LinkedList<>();
+        newTurnMocks.addAll(List.of(newTurnMock1, newTurnMock2));
+
+        this.newRoundState = new NewRoundState(List.of(figureLocationMock1, figureLocationMock2), Map.of(
+                new PlayerOrder(0,2), newTurnMock1, new PlayerOrder(1, 2), newTurnMock2
+        ));
     }
 
     private HasAction tryToMakeAutomaticAction(){
 
 
-        newTurnMock.newTurnCalled = false;
+        newTurnMocks.get(0).newTurnCalled = false;
+        newTurnMocks.get(1).newTurnCalled = false;
         return newRoundState.tryToMakeAutomaticAction(new PlayerOrder(0,1));
+    }
+
+    private void checkNewTurnCalled(){
+
+        assertTrue(newTurnMocks.get(0).newTurnCalled);
+        assertTrue(newTurnMocks.get(1).newTurnCalled);
     }
 
     @Test
     public void testTryToMakeAutomaticAction() {
 
-        figureLocationMock1.expectedBoolean = false;
-        figureLocationMock2.expectedBoolean = false;
+        figureLocationMock1.expectedNewTurn = false;
+        figureLocationMock2.expectedNewTurn = false;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
-        assertTrue(newTurnMock.newTurnCalled);
+        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
+        checkNewTurnCalled();
 
-        figureLocationMock1.expectedBoolean = false;
-        figureLocationMock2.expectedBoolean = true;
+        figureLocationMock1.expectedNewTurn = false;
+        figureLocationMock2.expectedNewTurn = true;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
-        assertTrue(newTurnMock.newTurnCalled);
+        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
+        checkNewTurnCalled();
 
-        figureLocationMock1.expectedBoolean = true;
-        figureLocationMock2.expectedBoolean = false;
+        figureLocationMock1.expectedNewTurn = true;
+        figureLocationMock2.expectedNewTurn = false;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
-        assertTrue(newTurnMock.newTurnCalled);
+        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
+        checkNewTurnCalled();
 
-        figureLocationMock1.expectedBoolean = true;
-        figureLocationMock2.expectedBoolean = true;
+        figureLocationMock1.expectedNewTurn = true;
+        figureLocationMock2.expectedNewTurn = true;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
-        assertFalse(newTurnMock.newTurnCalled);
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
     }
 }

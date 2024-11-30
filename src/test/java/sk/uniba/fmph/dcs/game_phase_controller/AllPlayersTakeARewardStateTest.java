@@ -2,34 +2,19 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 
 import org.junit.Test;
 import org.junit.Before;
+import sk.uniba.fmph.dcs.game_phase_controller.mocks.TakeRewardMock;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import static org.junit.Assert.*;
 
-class MockTakeReward implements InterfaceTakeReward{
-
-    HasAction expectedHasAction;
-    boolean expectedBoolean;
-    @Override
-    public boolean takeReward(PlayerOrder player, Effect reward) {
-
-        return expectedBoolean;
-    }
-
-    @Override
-    public HasAction tryMakeAction(PlayerOrder player) {
-
-        return expectedHasAction;
-    }
-}
 public class AllPlayersTakeARewardStateTest {
 
-    private MockTakeReward takeReward;
+    private TakeRewardMock takeReward;
     private AllPlayersTakeARewardState allPlayersTakeARewardState;
     @Before
     public void setUp(){
 
-        takeReward = new MockTakeReward();
+        takeReward = new TakeRewardMock();
         allPlayersTakeARewardState = new AllPlayersTakeARewardState(takeReward);
 
     }
@@ -40,12 +25,12 @@ public class AllPlayersTakeARewardStateTest {
     @Test
     public void testMakeAllPlayersTakeARewardChoice() {
 
-        takeReward.expectedBoolean = true;
+        takeReward.expectedTakeReward = true;
 
-        assertEquals(makeAllPlayersTakeARewardChoice(), ActionResult.ACTION_DONE);
+        assertEquals(ActionResult.ACTION_DONE, makeAllPlayersTakeARewardChoice());
 
-        takeReward.expectedBoolean = false;
-        assertEquals(makeAllPlayersTakeARewardChoice(), ActionResult.FAILURE);
+        takeReward.expectedTakeReward = false;
+        assertEquals(ActionResult.FAILURE, makeAllPlayersTakeARewardChoice());
     }
 
     public HasAction tryToMakeAutomaticAction(){
@@ -55,14 +40,14 @@ public class AllPlayersTakeARewardStateTest {
     @Test
     public void testTryToMakeAutomaticAction() {
 
-        takeReward.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
+        takeReward.expectedTryMakeAction = HasAction.NO_ACTION_POSSIBLE;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.NO_ACTION_POSSIBLE);
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
 
-        takeReward.expectedHasAction = HasAction.AUTOMATIC_ACTION_DONE;
+        takeReward.expectedTryMakeAction = HasAction.AUTOMATIC_ACTION_DONE;
 
-        assertEquals(tryToMakeAutomaticAction(), HasAction.AUTOMATIC_ACTION_DONE);
+        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
 
-        takeReward.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        takeReward.expectedTryMakeAction = HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 }
