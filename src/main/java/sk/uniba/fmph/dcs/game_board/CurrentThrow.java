@@ -8,21 +8,13 @@ import java.util.*;
 
 public class CurrentThrow implements InterfaceCurrentThrow, InterfaceToolUse {
 
-    private static class Throw {
-
-        public int[] expectedResult;
-        public int[] throwDices(int dices) {
-            return expectedResult;
-        }
-    }
-
     private Effect throwsFor;
     private int throwResult;
-    private Throw throwDices;
+    private InterfaceThrow throwDices;
     private Player player;
     private int throwSum, divBy;
 
-    public CurrentThrow(Throw throwDices) {
+    public CurrentThrow(InterfaceThrow throwDices) {
         this.throwDices = throwDices;
     }
 
