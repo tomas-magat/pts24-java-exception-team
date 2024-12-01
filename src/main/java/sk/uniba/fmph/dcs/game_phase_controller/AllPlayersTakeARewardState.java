@@ -63,6 +63,12 @@ public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
 
-        return takeReward.tryMakeAction(player);
+        int cntPlayers = player.getPlayers();
+        for(int i = 0; i < cntPlayers; i++){
+            if(takeReward.tryMakeAction(new PlayerOrder(i, cntPlayers)) != HasAction.NO_ACTION_POSSIBLE){
+                return takeReward.tryMakeAction(player);
+            }
+        }
+        return HasAction.NO_ACTION_POSSIBLE;
     }
 }
