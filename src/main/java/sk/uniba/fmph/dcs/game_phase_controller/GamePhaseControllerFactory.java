@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class GamePhaseControllerFactory {
 
-    public static GamePhaseController createGamePhaseController(
+    public static InterfaceGamePhaseController createGamePhaseController(
                                                                 Map<Location, InterfaceFigureLocation> places,
                                                                 Map<PlayerOrder, InterfaceFeedTribe> playerFeedTribe,
                                                                 Map<PlayerOrder, InterfaceNewTurn> playerNewTurn,

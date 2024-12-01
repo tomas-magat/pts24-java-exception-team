@@ -5,6 +5,7 @@ import org.junit.Before;
 import sk.uniba.fmph.dcs.game_phase_controller.mocks.TakeRewardMock;
 import sk.uniba.fmph.dcs.stone_age.*;
 
+
 import static org.junit.Assert.*;
 
 public class AllPlayersTakeARewardStateTest {
@@ -33,21 +34,20 @@ public class AllPlayersTakeARewardStateTest {
         assertEquals(ActionResult.FAILURE, makeAllPlayersTakeARewardChoice());
     }
 
-    public HasAction tryToMakeAutomaticAction(){
+    public HasAction tryToMakeAutomaticAction(PlayerOrder player){
 
-        return allPlayersTakeARewardState.tryToMakeAutomaticAction(new PlayerOrder(0,1));
+        return allPlayersTakeARewardState.tryToMakeAutomaticAction(player);
     }
     @Test
     public void testTryToMakeAutomaticAction() {
 
-        takeReward.expectedTryMakeAction = HasAction.NO_ACTION_POSSIBLE;
+        takeReward.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, tryToMakeAutomaticAction(new PlayerOrder(0,2)));
 
-        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
+        takeReward.expectedHasAction = HasAction.AUTOMATIC_ACTION_DONE;
+        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction(new PlayerOrder(1,2)));
 
-        takeReward.expectedTryMakeAction = HasAction.AUTOMATIC_ACTION_DONE;
-
-        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
-
-        takeReward.expectedTryMakeAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        takeReward.expectedHasAction = HasAction.NO_ACTION_POSSIBLE;
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction(new PlayerOrder(1,2)));
     }
 }
