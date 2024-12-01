@@ -9,8 +9,8 @@ public class CivilizationCardDeck {
 
     private Stack<CivilisationCard> stack;
 
-    public CivilizationCardDeck() {
-        this.stack = new Stack<>();
+    public CivilizationCardDeck(Stack<CivilisationCard> stack) {
+        this.stack = stack;
     }
 
     public Optional<CivilisationCard> getTop() {
