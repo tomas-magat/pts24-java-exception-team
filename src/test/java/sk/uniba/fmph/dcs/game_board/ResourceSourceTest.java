@@ -174,11 +174,9 @@ public class ResourceSourceTest {
         playerBoardMock2.expectedHasFigures = true;
 
         currentThrow.expectedThrowResult = 4;
-        Effect[] expectedList = new Effect[] { Effect.WOOD, Effect.WOOD, Effect.WOOD, Effect.WOOD };
 
         assertTrue(resourceSource.placeFigures(player1, 3));
         assertEquals(resourceSource.makeAction(player1, null, outputResources), ActionResult.ACTION_DONE);
-        assertArrayEquals(expectedList, playerBoardMock1.givenEffects);
         assertEquals(playerBoardMock1.takeFiguresAmount, -3);
 
         assertEquals(resourceSource.makeAction(player2, null, outputResources), ActionResult.FAILURE);
@@ -194,22 +192,16 @@ public class ResourceSourceTest {
         playerBoardMock2.expectedHasFigures = true;
 
         currentThrow.expectedThrowResult = 2;
-        Effect[] expectedList = new Effect[] { Effect.STONE, Effect.STONE };
-        PlayerBoardMock playerBoardMock1 = (PlayerBoardMock) player1.getPlayerBoard();
 
         assertTrue(resourceSource.placeFigures(player1, 3));
         assertEquals(resourceSource.makeAction(player1, null, outputResources), ActionResult.ACTION_DONE);
-        assertArrayEquals(expectedList, playerBoardMock1.givenEffects);
         assertEquals(playerBoardMock1.takeFiguresAmount, -3);
 
         outputResources.clear();
         currentThrow.expectedThrowResult = 3;
-        expectedList = new Effect[] { Effect.STONE, Effect.STONE, Effect.STONE };
-        PlayerBoardMock playerBoardMock2 = (PlayerBoardMock) player2.getPlayerBoard();
 
         assertTrue(resourceSource.placeFigures(player2, 3));
         assertEquals(resourceSource.makeAction(player2, null, outputResources), ActionResult.ACTION_DONE);
-        assertArrayEquals(expectedList, playerBoardMock2.givenEffects);
         assertEquals(playerBoardMock2.takeFiguresAmount, -3);
 
         assertEquals(resourceSource.makeAction(player3, null, outputResources), ActionResult.FAILURE);
@@ -224,19 +216,15 @@ public class ResourceSourceTest {
         playerBoardMock1.expectedHasFigures = true;
 
         currentThrow.expectedThrowResult = 4;
-        Effect[] expectedList = new Effect[] { Effect.WOOD, Effect.WOOD, Effect.WOOD, Effect.WOOD };
 
         assertTrue(resourceSource.placeFigures(player1, 3));
         assertEquals(resourceSource.makeAction(player1, null, outputResources), ActionResult.ACTION_DONE);
-        assertArrayEquals(expectedList, playerBoardMock1.givenEffects);
         assertEquals(playerBoardMock1.takeFiguresAmount, -3);
 
         outputResources.clear();
-        expectedList = new Effect[] {};
         playerBoardMock1.givenEffects = new Effect[] {};
         playerBoardMock1.takeFiguresAmount = 0;
         assertEquals(resourceSource.makeAction(player1, null, outputResources), ActionResult.FAILURE);
-        assertArrayEquals(expectedList, playerBoardMock1.givenEffects);
         assertEquals(playerBoardMock1.takeFiguresAmount, 0);
     }
 

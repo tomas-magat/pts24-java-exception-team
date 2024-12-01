@@ -61,19 +61,20 @@ public class ResourceSource implements InterfaceFigureLocationInternal {
         if (tryToMakeAction(player) == HasAction.NO_ACTION_POSSIBLE) return ActionResult.FAILURE;
 
         currentThrow.initiate(player, this.resource, figures.get(player.getPlayerOrder()));
-        int throwResult = currentThrow.getThrowResult();
+        //int throwResult = currentThrow.getThrowResult();
 
-        for (int i = 0; i < throwResult; i++) {
+        /*for (int i = 0; i < throwResult; i++) {
             outputResources.add(this.resource); // idk
-        }
+        }*/
 
-        Effect[] effects = new Effect[outputResources.size()];
+        /*Effect[] effects = new Effect[outputResources.size()];
         int i = 0;
         for (Effect e : outputResources) {
             effects[i] = e;
             i++;
         }
-        player.getPlayerBoard().giveEffect(effects);
+        player.getPlayerBoard().giveEffect(effects);*/
+
         player.getPlayerBoard().takeFigures(-figures.get(player.getPlayerOrder()));
         figures.remove(player.getPlayerOrder());
 
