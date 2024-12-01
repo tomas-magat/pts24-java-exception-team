@@ -3,35 +3,37 @@ package sk.uniba.fmph.dcs.game_board;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 
 public class GetChoice implements EvaluateCivilisationCardImmediateEffect {
-    private boolean isUsed;
-    private int numberOfResources;
+    private boolean isUsedUp;
+    private final int numberOfResources;
 
     public GetChoice(int numberOfResources) {
-        this.isUsed = false;
+        this.isUsedUp = false;
         this.numberOfResources = numberOfResources;
     }
 
     @Override
     public boolean performEffect(Player player, Effect choice) {
-        if (this.isUsed){
-            return false;
+        if (isUsedUp()) {
+            throw new IllegalStateException("GetChoice is already used");
         }
 
         if (choice == null || !choice.isResource()) {
-            return false;
+            throw new IllegalStateException("Resources must be resources");
         }
 
-        player.getPlayerBoard().giveEffect(new Effect[] {choice});
-        numberOfResources++;
+        int timesUsed = 0;
 
-        if (numberOfResources == 2) {
-            this.isUsed = true;
+        player.getPlayerBoard().giveEffect(new Effect[]{choice});
+        timesUsed++;
+
+        if (timesUsed == numberOfResources) {
+            this.isUsedUp = true;
         }
 
         return true;
     }
 
-    public boolean isUsed() {
-        return this.isUsed;
+    public boolean isUsedUp() {
+        return this.isUsedUp;
     }
 }
