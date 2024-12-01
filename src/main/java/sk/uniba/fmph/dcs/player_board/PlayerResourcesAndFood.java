@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerResourcesAndFood {
+public class PlayerResourcesAndFood implements InterfacePlayerResourcesAndFood {
 
     private Map<Effect, Integer> resources;
 
@@ -20,6 +20,7 @@ public class PlayerResourcesAndFood {
         return resources.get(effect);
     }
 
+    @Override
     public boolean hasResources(List<Effect> resources) {
         Map<Effect, Integer> res = makeMap(resources);
         for (Map.Entry<Effect, Integer> entry : res.entrySet()) {
@@ -33,6 +34,7 @@ public class PlayerResourcesAndFood {
         return true;
     }
 
+    @Override
     public boolean takeResources(List<Effect> resources) {
         if (!hasResources(resources)) return false;
 
@@ -48,6 +50,7 @@ public class PlayerResourcesAndFood {
         return true;
     }
 
+    @Override
     public boolean giveResources(List<Effect> resources) {
         Map<Effect, Integer> res = makeMap(resources);
 
@@ -61,6 +64,7 @@ public class PlayerResourcesAndFood {
         return true;
     }
 
+    @Override
     public int numberOfResourcesForFinalPoints() {
         int totalPoints = 0;
         for (Map.Entry<Effect, Integer> entry : this.resources.entrySet()) {
@@ -73,6 +77,7 @@ public class PlayerResourcesAndFood {
         return totalPoints;
     }
 
+    @Override
     public String state() {
         Map<String, String> map = new HashMap<>();
         for (Map.Entry<Effect, Integer> entry : this.resources.entrySet()) {

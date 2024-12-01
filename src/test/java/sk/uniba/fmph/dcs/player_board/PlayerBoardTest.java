@@ -2,6 +2,7 @@ package sk.uniba.fmph.dcs.player_board;
 
 import org.junit.Before;
 import org.junit.Test;
+import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.EndOfGameEffect;
 
 import java.util.ArrayList;
@@ -12,6 +13,21 @@ import static org.junit.Assert.assertEquals;
 
 class MockPlayerResourcesAndFood implements InterfacePlayerResourcesAndFood {
     private int expectedResources;
+
+    @Override
+    public boolean hasResources(List<Effect> resources) {
+        return false;
+    }
+
+    @Override
+    public boolean takeResources(List<Effect> resources) {
+        return false;
+    }
+
+    @Override
+    public boolean giveResources(List<Effect> resources) {
+        return false;
+    }
 
     @Override
     public int numberOfResourcesForFinalPoints() {
