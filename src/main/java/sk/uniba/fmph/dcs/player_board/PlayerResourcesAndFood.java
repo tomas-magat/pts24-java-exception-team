@@ -16,6 +16,10 @@ public class PlayerResourcesAndFood {
         resources = new HashMap<>();
     }
 
+    public int getNumberOfResources(Effect effect) {
+        return resources.get(effect);
+    }
+
     public boolean hasResources(List<Effect> resources) {
         Map<Effect, Integer> res = makeMap(resources);
         for (Map.Entry<Effect, Integer> entry : res.entrySet()) {
