@@ -5,10 +5,10 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.InterfacePlayerBoardGameBoard;
 
 public class GetCard implements EvaluateCivilisationCardImmediateEffect {
-    private final CurrentThrow currentThrow;
-    private final CivilisationCardDeck cardDeck;
+    private final InterfaceCurrentThrow currentThrow;
+    private final InterfaceCivilizationCardDeck cardDeck;
 
-    public GetCard(CurrentThrow currentThrow, CivilisationCardDeck cardDeck) {
+    public GetCard(InterfaceCurrentThrow currentThrow, InterfaceCivilizationCardDeck cardDeck) {
         this.currentThrow = currentThrow;
         this.cardDeck = cardDeck;
     }
