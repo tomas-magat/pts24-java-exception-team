@@ -16,6 +16,13 @@ public class PlayerResourcesAndFood implements InterfacePlayerResourcesAndFood {
         resources = new HashMap<>();
     }
 
+    public int getNumberOfResources(Effect effect) {
+        if(!resources.containsKey(effect)) {
+            return -1;    
+        }
+        return resources.get(effect);
+    }
+
     @Override
     public boolean hasResources(List<Effect> resources) {
         Map<Effect, Integer> res = makeMap(resources);
