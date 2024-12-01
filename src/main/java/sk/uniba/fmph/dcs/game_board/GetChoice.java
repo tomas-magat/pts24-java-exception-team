@@ -4,11 +4,11 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 
 public class GetChoice implements EvaluateCivilisationCardImmediateEffect {
     private boolean isUsedUp;
-    private final int numberOfResources;
+    private int numberOfResources;
 
-    public GetChoice(int numberOfResources) {
+    public GetChoice() {
         this.isUsedUp = false;
-        this.numberOfResources = numberOfResources;
+        this.numberOfResources = 0;
     }
 
     @Override
@@ -21,12 +21,11 @@ public class GetChoice implements EvaluateCivilisationCardImmediateEffect {
             throw new IllegalStateException("Resources must be resources");
         }
 
-        int timesUsed = 0;
-
         player.getPlayerBoard().giveEffect(new Effect[]{choice});
-        timesUsed++;
+        System.out.println("Effect: " + choice + " applied to player" + player.getPlayerOrder());
+        numberOfResources++;
 
-        if (timesUsed == numberOfResources) {
+        if (numberOfResources == 2) {
             this.isUsedUp = true;
         }
 
