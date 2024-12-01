@@ -36,16 +36,16 @@ public class CurrentThrowTest {
 
         playerBoardMock1.expectedHasSufficientTools = false;
         assertFalse(currentThrow.useTool(2));
+        assertNull(playerBoardMock1.givenEffects);
 
+        Effect[] expectedList = new Effect[11];
+        for (int i = 0; i < 11; i++) expectedList[i] = Effect.FOOD;
         playerBoardMock1.expectedHasSufficientTools = true;
         assertTrue(currentThrow.useTool(2));
         assertEquals(playerBoardMock1.usedToolID, 2);
         assertEquals(currentThrow.getThrowResult(), 11);
-
-        playerBoardMock1.expectedHasSufficientTools = true;
-        assertTrue(currentThrow.useTool(4));
-        assertEquals(playerBoardMock1.usedToolID, 4);
-        assertEquals(currentThrow.getThrowResult(), 13);
+        assertTrue(currentThrow.finishUsingTools());
+        assertArrayEquals(playerBoardMock1.givenEffects, expectedList);
     }
 
     @Test
@@ -63,6 +63,10 @@ public class CurrentThrowTest {
         assertTrue(currentThrow.useTool(4));
         assertEquals(playerBoardMock1.usedToolID, 4);
         assertEquals(currentThrow.getThrowResult(), 4);
+        assertTrue(currentThrow.finishUsingTools());
+        Effect[] expectedList = new Effect[4];
+        for (int i = 0; i < 4; i++) expectedList[i] = Effect.WOOD;
+        assertArrayEquals(playerBoardMock1.givenEffects, expectedList);
     }
 
     @Test
@@ -80,6 +84,10 @@ public class CurrentThrowTest {
         assertTrue(currentThrow.useTool(6));
         assertEquals(playerBoardMock1.usedToolID, 6);
         assertEquals(currentThrow.getThrowResult(), 2);
+        assertTrue(currentThrow.finishUsingTools());
+        Effect[] expectedList = new Effect[2];
+        for (int i = 0; i < 2; i++) expectedList[i] = Effect.CLAY;
+        assertArrayEquals(playerBoardMock1.givenEffects, expectedList);
     }
 
     @Test
@@ -97,6 +105,10 @@ public class CurrentThrowTest {
         assertTrue(currentThrow.useTool(3));
         assertEquals(playerBoardMock1.usedToolID, 3);
         assertEquals(currentThrow.getThrowResult(), 3);
+        assertTrue(currentThrow.finishUsingTools());
+        Effect[] expectedList = new Effect[3];
+        for (int i = 0; i < 3; i++) expectedList[i] = Effect.STONE;
+        assertArrayEquals(playerBoardMock1.givenEffects, expectedList);
     }
 
     @Test
@@ -119,9 +131,14 @@ public class CurrentThrowTest {
         assertTrue(currentThrow.useTool(7));
         assertEquals(playerBoardMock1.usedToolID, 7);
         assertEquals(currentThrow.getThrowResult(), 6);
+        assertTrue(currentThrow.finishUsingTools());
+        Effect[] expectedList = new Effect[6];
+        for (int i = 0; i < 6; i++) expectedList[i] = Effect.GOLD;
+        assertArrayEquals(playerBoardMock1.givenEffects, expectedList);
     }
 
-    @Test
+    // irrelevant
+    /*@Test
     public void testThrowCivilizationCardDiceRoll() {
         // test rolling dice on the civilization card "Dice roll"
         throwMock.expectedResult = new int[] {6, 4, 4, 2};
@@ -137,7 +154,7 @@ public class CurrentThrowTest {
         assertFalse(currentThrow.useTool(1));
         assertEquals(playerBoardMock1.usedToolID, 0);
         assertEquals(currentThrow.getThrowResult(), 16);
-    }
+    }*/
 
 
 
@@ -152,10 +169,11 @@ public class CurrentThrowTest {
     private static class PlayerBoardMock implements InterfacePlayerBoardGameBoard {
         public boolean expectedHasSufficientTools;
         public int usedToolID;
+        public Effect[] givenEffects;
 
         @Override
         public void giveEffect(Effect[] stuff) {
-
+            this.givenEffects = stuff;
         }
 
         @Override

@@ -13,13 +13,16 @@ public class CurrentThrow implements InterfaceCurrentThrow, InterfaceToolUse {
     private InterfaceThrow throwDices;
     private Player player;
     private int throwSum, divBy;
+    private List<Integer> toolsUsed;
 
     public CurrentThrow(InterfaceThrow throwDices) {
         this.throwDices = throwDices;
+        toolsUsed = new ArrayList<>();
     }
 
     @Override
     public void initiate(Player player, Effect effect, int dices) {
+        toolsUsed.clear();
         this.throwsFor = effect;
         this.player = player;
 
@@ -76,6 +79,7 @@ public class CurrentThrow implements InterfaceCurrentThrow, InterfaceToolUse {
         if (!player.getPlayerBoard().hasSufficientTools(idx)) return false;
 
         player.getPlayerBoard().useTool(idx);
+        toolsUsed.add(idx);
 
         this.throwSum += idx;
         this.throwResult = this.throwSum / this.divBy;
@@ -90,6 +94,11 @@ public class CurrentThrow implements InterfaceCurrentThrow, InterfaceToolUse {
 
     @Override
     public boolean finishUsingTools() {
-        return false; // idk
+        Effect[] result = new Effect[throwResult];
+        for (int i = 0; i < throwResult; i++) {
+            result[i] = throwsFor;
+        }
+        player.getPlayerBoard().giveEffect(result);
+        return true;
     }
 }
