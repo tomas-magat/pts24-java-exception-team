@@ -3,11 +3,9 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.Before;
-import sk.uniba.fmph.dcs.game_board.Player;
 import sk.uniba.fmph.dcs.game_phase_controller.mocks.*;
 import sk.uniba.fmph.dcs.stone_age.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +17,8 @@ public class GamePhaseControllerIntegrationTests {
     private List<PlayerOrder> players;
     private Map<Location, InterfaceFigureLocation> places;
     private Map<PlayerOrder, InterfaceFeedTribe> playerFeedTribe;
-    private Map<PlayerOrder, InterfaceNewTurn> playerNewTurn;
-    private InterfaceToolUse toolUse;
-    private InterfaceTakeReward takeReward;
+    private ToolUseMock toolUse;
+    private TakeRewardMock takeReward;
     private PlayerOrder player1;
     private PlayerOrder player2;
 
@@ -33,7 +30,7 @@ public class GamePhaseControllerIntegrationTests {
         players = List.of(player1,player2);
         places = Map.of(Location.HUNTING_GROUNDS, new FigureLocationMock(), Location.CLAY_MOUND, new FigureLocationMock());
         playerFeedTribe = Map.of(players.get(0), new FeedTribeMock(), players.get(1), new FeedTribeMock());
-        playerNewTurn = Map.of(players.get(0), new NewTurnMock(), players.get(1), new NewTurnMock());
+        Map<PlayerOrder, InterfaceNewTurn> playerNewTurn = Map.of(players.get(0), new NewTurnMock(), players.get(1), new NewTurnMock());
         toolUse = new ToolUseMock();
         takeReward = new TakeRewardMock();
         gamePhaseController = GamePhaseControllerFactory.createGamePhaseController(places, playerFeedTribe,
@@ -183,6 +180,28 @@ public class GamePhaseControllerIntegrationTests {
 
         }
     }
+
+    @Test
+    public void testTakeRewardAndGoToFeedTribeState(){
+        goToMakeActionState();
+
+        setPlaceActionsMaxCount(0, "H", -1);
+        setPlaceActionsMaxCount(1, "R", -1);
+
+        if(places.get(Location.CLAY_MOUND) instanceof FigureLocationMock figureLocationMock){
+            figureLocationMock.expectedMakeAction = ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD;
+        }
+
+        takeReward.expectedHasAction = HasAction.WAITING_FOR_PLAYER_ACTION;
+        makeAction(0, "R");
+
+        takeReward.expectedTakeReward = true;
+        gamePhaseController.makeAllPlayersTakeARewardChoice(players.get(0), Effect.WOOD);
+
+        checkStateString("FEED_TRIBE,0/0/None");
+        assertFalse(gamePhaseController.makeAllPlayersTakeARewardChoice(players.get(0), Effect.WOOD));
+
+    }
     @Test
     public void testUseToolsAndGoToFeedTribeState(){
 
@@ -191,11 +210,9 @@ public class GamePhaseControllerIntegrationTests {
         setPlaceActionsMaxCount(1, "R", -1);
 
         setPlaceToolUse("R");
-        if(toolUse instanceof ToolUseMock toolUseMock){
-            toolUseMock.expectedUseTool = true;
-            toolUseMock.expectedCanUseTools = true;
-            toolUseMock.maxToolsUses = 2;
-        }
+        toolUse.expectedUseTool = true;
+        toolUse.expectedCanUseTools = true;
+        toolUse.maxToolsUses = 2;
 
         makeAction(0, "R");
         checkStateString("WAITING_FOR_TOOL_USE,0/0/None");
@@ -234,17 +251,57 @@ public class GamePhaseControllerIntegrationTests {
         setPlaceActionsMaxCount(0, "R", -1);
         goToMakeActionState();
 
-        System.out.println(gamePhaseController.state());
     }
 
     @Test
-    public void testFeed(){
+    public void testFeedTribeAndGoToNewRound(){
+
+        if(playerFeedTribe.get(player1) instanceof FeedTribeMock feedTribeMock1){
+            feedTribeMock1.expectedFeedTribeIfEnoughFood = false;
+        }
 
         goToFeedTribeState();
         checkStateString("FEED_TRIBE,0/0/None");
 
-        if(playerFeedTribe.get(player1) instanceof FeedTribeMock feedTribeMock){
-            feedTribeMock.expectedFeedTribe = true;
+
+        if(playerFeedTribe.get(player1) instanceof FeedTribeMock feedTribeMock1){
+            feedTribeMock1.expectedDoNotFeedThisTurn = true;
+            feedTribeMock1.expectedIsTribeFed = true;
         }
+        if(playerFeedTribe.get(player2) instanceof FeedTribeMock feedTribeMock2){
+
+            feedTribeMock2.expectedIsTribeFed = true;
+        }
+
+        setPlaceFiguresMaxCount(1, "H");
+        gamePhaseController.doNotFeedThisTurn(players.get(0));
+        checkStateString("PLACE_FIGURES,1/1/None");
+        assertFalse(gamePhaseController.doNotFeedThisTurn(players.get(0)));
+
+
     }
+    @Test
+    public void testFeedTribeAndEndGame(){
+
+
+        if(playerFeedTribe.get(player1) instanceof FeedTribeMock feedTribeMock1){
+            feedTribeMock1.expectedIsTribeFed = true;
+        }
+
+        if(playerFeedTribe.get(player2) instanceof FeedTribeMock feedTribeMock2){
+
+            feedTribeMock2.expectedIsTribeFed = true;
+        }
+
+        if(places.get(Location.HUNTING_GROUNDS) instanceof FigureLocationMock figureLocationMock1){
+            figureLocationMock1.expectedNewTurn = true;
+        }
+        if(places.get(Location.CLAY_MOUND) instanceof FigureLocationMock figureLocationMock2){
+            figureLocationMock2.expectedNewTurn = true;
+        }
+
+        goToFeedTribeState();
+        checkStateString("GAME_END,0/0/None");
+    }
+
 }

@@ -3,7 +3,6 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
-import java.util.Map;
 
 public class WaitingForToolUseState implements InterfaceGamePhaseState{
 

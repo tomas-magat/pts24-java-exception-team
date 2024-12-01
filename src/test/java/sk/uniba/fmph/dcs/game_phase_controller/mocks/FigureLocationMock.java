@@ -1,6 +1,5 @@
 package sk.uniba.fmph.dcs.game_phase_controller.mocks;
 
-import sk.uniba.fmph.dcs.game_board.Player;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 public class FigureLocationMock implements InterfaceFigureLocation {
