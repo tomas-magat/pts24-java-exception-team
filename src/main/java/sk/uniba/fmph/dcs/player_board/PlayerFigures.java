@@ -20,6 +20,10 @@ public class PlayerFigures {
         }
     }
 
+    public int getFigures(){
+        return figures;
+    }
+
     public boolean hasFigures(int count){
         return figures >= count;
     }
