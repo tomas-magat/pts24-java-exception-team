@@ -31,9 +31,9 @@ public class TribeFedStatusTest {
 
         assertTrue(tribeFedStatus.setTribeFed());
 
-        assertTrue(tribeFedStatus.isTribeFed()); // tribe should not be fed at the start
+        assertTrue(tribeFedStatus.isTribeFed()); // we dont need to remove 10 points now
 
-        assertFalse(tribeFedStatus.setTribeFed()); // we dont need to remove 10 points now
+        assertFalse(tribeFedStatus.setTribeFed());
     }
 
     @Test
