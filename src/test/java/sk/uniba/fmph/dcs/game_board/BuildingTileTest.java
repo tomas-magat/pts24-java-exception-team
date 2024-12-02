@@ -88,6 +88,63 @@ public class BuildingTileTest {
     }
 
     @Test
+    public void testBuildingWithMoreResources() {
+        ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new SimpleBuilding(List.of(Effect.WOOD, Effect.STONE, Effect.GOLD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "simple building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        String expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+    }
+
+    @Test
+    public void testVariableBuilding() {
+        ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new VariableBuilding(1, 1);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "variable building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        String expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+
+
+        building = new VariableBuilding(7, 4);
+        buildingTile = new BuildingTile(figures, building);
+
+        expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "variable building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+    }
+
+    @Test // TODO
+    public void testArbitraryBuilding() {
+        ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new ArbitraryBuilding(3);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "arbitrary building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        String expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+    }
+
+    @Test
     public void testTryToPlaceFiguresIntoOccupied() {
         PlayerBoardMock pbm = new PlayerBoardMock();
         Player player = new Player(new PlayerOrder(4, 6), pbm);
