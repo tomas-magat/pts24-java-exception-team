@@ -81,12 +81,6 @@ public class PlayerBoard implements InterfaceGetState {
         points += resourcesAndFood.numberOfResourcesForFinalPoints();
     }
 
-    public void newTurn(){
-        tools.newTurn();
-        figures.newTurn();
-        fedStatus.newTurn();
-    }
-
     @Override
     public String state() {
         Map<String, String> state = Map.of(
