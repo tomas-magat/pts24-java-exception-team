@@ -8,9 +8,9 @@ import java.util.List;
 
 public class GetSomethingThrow implements EvaluateCivilisationCardImmediateEffect {
     private final Effect resource;
-    private final CurrentThrow currentThrow;
+    private final InterfaceCurrentThrow currentThrow;
 
-    public GetSomethingThrow(Effect resource, CurrentThrow currentThrow) {
+    public GetSomethingThrow(Effect resource, InterfaceCurrentThrow currentThrow) {
         if (!resource.isResource()) {
             throw new IllegalArgumentException("Resources must be resource");
         }
