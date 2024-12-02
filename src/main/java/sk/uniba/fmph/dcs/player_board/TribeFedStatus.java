@@ -32,7 +32,6 @@ public class TribeFedStatus implements InterfaceTribeFedStatus{
 
     public void newTurn() {
         tribeFed = false;
-        playerFigures.newTurn();
     }
 
     public boolean feedTribeIfEnoughFood(){
