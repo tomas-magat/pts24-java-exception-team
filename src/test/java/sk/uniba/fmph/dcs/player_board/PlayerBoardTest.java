@@ -97,8 +97,8 @@ class MockPlayerFigures implements InterfacePlayerFigures {
     private int expectedFigures;
 
     @Override
-    public void addNewFigure() {
-        ;
+    public boolean addNewFigure() {
+        return false;
     }
 
     @Override

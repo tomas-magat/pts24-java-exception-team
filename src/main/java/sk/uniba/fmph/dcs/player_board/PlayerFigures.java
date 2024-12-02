@@ -15,10 +15,12 @@ public class PlayerFigures implements InterfacePlayerFigures{
     }
 
     @Override
-    public void addNewFigure(){
-        if(totalFigures < 10) {
-            totalFigures++;
+    public boolean addNewFigure(){
+        if(totalFigures >= 10){
+            return false;
         }
+        totalFigures++;
+        return true;
     }
 
     @Override
