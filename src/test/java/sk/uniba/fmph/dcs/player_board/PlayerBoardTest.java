@@ -54,8 +54,38 @@ class MockTribeFedStatus implements InterfaceTribeFedStatus {
     }
 
     @Override
+    public void addField() {
+        ;
+    }
+
+    @Override
     public int getFields() {
         return expectedFields;
+    }
+
+    @Override
+    public void newTurn() {
+        ;
+    }
+
+    @Override
+    public boolean feedTribeIfEnoughFood() {
+        return false;
+    }
+
+    @Override
+    public boolean feedTribe(List<Effect> resources) {
+        return false;
+    }
+
+    @Override
+    public boolean setTribeFed() {
+        return false;
+    }
+
+    @Override
+    public boolean isTribeFed() {
+        return false;
     }
 
     public void setFields(int fields) {
@@ -63,8 +93,38 @@ class MockTribeFedStatus implements InterfaceTribeFedStatus {
     }
 }
 
-class MockPlayerFigures extends PlayerFigures {
+class MockPlayerFigures implements InterfacePlayerFigures {
     private int expectedFigures;
+
+    @Override
+    public boolean addNewFigure() {
+        return false;
+    }
+
+    @Override
+    public int getFigures() {
+        return 0;
+    }
+
+    @Override
+    public boolean hasFigures(int count) {
+        return false;
+    }
+
+    @Override
+    public int getTotalFigures() {
+        return expectedFigures;
+    }
+
+    @Override
+    public boolean takeFigures(int count) {
+        return false;
+    }
+
+    @Override
+    public void newTurn() {
+        ;
+    }
 
     @Override
     public String state() {

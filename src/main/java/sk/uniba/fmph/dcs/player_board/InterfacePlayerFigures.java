@@ -1,7 +1,6 @@
 package sk.uniba.fmph.dcs.player_board;
 
 public interface InterfacePlayerFigures {
-    int totalFigures();
     boolean addNewFigure();
     int getFigures();
     boolean hasFigures(int count);
@@ -9,4 +8,5 @@ public interface InterfacePlayerFigures {
     boolean takeFigures(int count);
     void newTurn();
     String state();
+
 }

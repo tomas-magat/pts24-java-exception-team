@@ -13,4 +13,5 @@ public interface InterfaceTribeFedStatus {
     boolean setTribeFed();
     boolean isTribeFed();
     String state();
+
 }

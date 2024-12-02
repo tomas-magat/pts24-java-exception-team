@@ -20,21 +20,24 @@ public class TribeFedStatus implements InterfaceTribeFedStatus{
         this.playerResourcesAndFood = playerResourcesAndFood;
     }
 
+    @Override
     public void addField(){
         if(fields < 10){
             fields++;
         }
     }
 
+    @Override
     public int getFields(){
         return fields;
     }
 
+    @Override
     public void newTurn() {
         tribeFed = false;
-        playerFigures.newTurn();
     }
 
+    @Override
     public boolean feedTribeIfEnoughFood(){
         if(tribeFed){
             return true;
@@ -61,6 +64,7 @@ public class TribeFedStatus implements InterfaceTribeFedStatus{
         return true;
     }
 
+    @Override
     public boolean feedTribe(List<Effect> resources){
         if(tribeFed){
             return true;
@@ -106,6 +110,7 @@ public class TribeFedStatus implements InterfaceTribeFedStatus{
 
     }
 
+    @Override
     public boolean setTribeFed(){
         if(tribeFed){
             return false;
@@ -115,10 +120,10 @@ public class TribeFedStatus implements InterfaceTribeFedStatus{
         return true;
     }
 
+    @Override
     public boolean isTribeFed(){
         return tribeFed;
     }
-
 
     @Override
     public String state() {

@@ -13,7 +13,7 @@ public class PlayerBoard implements InterfaceGetState {
     private PlayerTools tools;
     private InterfacePlayerResourcesAndFood resourcesAndFood;
     private InterfaceTribeFedStatus fedStatus;
-    private PlayerFigures figures;
+    private InterfacePlayerFigures figures;
 
 
     public PlayerBoard(
@@ -23,7 +23,7 @@ public class PlayerBoard implements InterfaceGetState {
             PlayerTools tools,
             InterfacePlayerResourcesAndFood resourcesAndFood,
             InterfaceTribeFedStatus fedStatus,
-            PlayerFigures figures
+            InterfacePlayerFigures figures
     ) {
         // Initial situation when the game begins
         this.points = points;
@@ -55,8 +55,8 @@ public class PlayerBoard implements InterfaceGetState {
         return (PlayerResourcesAndFood) resourcesAndFood;
     }
 
-    public InterfaceTribeFedStatus getTribeFedStatus() {
-        return fedStatus;
+    public TribeFedStatus getTribeFedStatus() {
+        return (TribeFedStatus) fedStatus;
     }
 
     public PlayerFigures getPlayerFigures() {
@@ -76,7 +76,7 @@ public class PlayerBoard implements InterfaceGetState {
             houses,
             tools.getToolCount(),
             fedStatus.getFields(),
-            figures.totalFigures()
+            figures.getTotalFigures()
         );
         points += resourcesAndFood.numberOfResourcesForFinalPoints();
     }
