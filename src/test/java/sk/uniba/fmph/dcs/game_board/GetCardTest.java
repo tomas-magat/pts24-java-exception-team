@@ -44,7 +44,7 @@ public class GetCardTest {
             public OptionalInt useTool(int idx) {return OptionalInt.empty();}
             public boolean addNewFigure() {return false;}
         });
-        Effect choice = Effect.CLAY; // toto je uplne jedno podla game rules
+        ImmediateEffect choice = ImmediateEffect.Clay; // toto je uplne jedno podla game rules
                                      // ("The upper section of the card is ignored...")
         assertFalse(getCard.performEffect(player, choice));
     }
@@ -67,7 +67,7 @@ public class GetCardTest {
             public OptionalInt useTool(int idx) {return OptionalInt.empty();}
             public boolean addNewFigure() {return false;}
         });
-        Effect choice = Effect.CLAY; // toto je uplne jedno podla game rules
+        ImmediateEffect choice = ImmediateEffect.Clay; // toto je uplne jedno podla game rules
                                      // ("The upper section of the card is ignored...")
         assertTrue(getCard.performEffect(player, choice));
     }
