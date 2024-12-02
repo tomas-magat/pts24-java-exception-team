@@ -1,16 +1,25 @@
 package sk.uniba.fmph.dcs.player_board;
 
+import java.util.Map;
+
 public class PlayerBoardFactory {
-    public PlayerBoard createEmptyPlayerBoard() {
+    public Map.Entry<PlayerBoard, PlayerBoardFacade> createPlayerBoard() {
+        PlayerFigures figures = new PlayerFigures();
+        PlayerCivilisationCards cards = new PlayerCivilisationCards();
+        PlayerTools tools = new PlayerTools();
+        PlayerResourcesAndFood resourcesAndFood = new PlayerResourcesAndFood();
+        TribeFedStatus fedStatus = new TribeFedStatus(figures, resourcesAndFood);
+
         PlayerBoard board = new PlayerBoard(
                 0,
                 0,
-                new PlayerCivilisationCards(),
-                new PlayerTools(),
-                new PlayerResourcesAndFood(),
-                new TribeFedStatus(),
-                new PlayerFigures()
+                cards,
+                tools,
+                resourcesAndFood,
+                fedStatus,
+                figures
         );
+
 
     }
 }

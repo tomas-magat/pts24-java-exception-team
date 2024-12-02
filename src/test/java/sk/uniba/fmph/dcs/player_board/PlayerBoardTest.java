@@ -63,14 +63,8 @@ class MockTribeFedStatus implements InterfaceTribeFedStatus {
     }
 }
 
-class MockPlayerFigures implements InterfacePlayerFigures {
+class MockPlayerFigures extends PlayerFigures {
     private int expectedFigures;
-
-
-    @Override
-    public int totalFigures() {
-        return expectedFigures;
-    }
 
     @Override
     public String state() {
