@@ -13,12 +13,6 @@ public class AllPlayersTakeReward implements EvaluateCivilisationCardImmediateEf
     @Override
     public boolean performEffect(Player player, Effect choice) {
         PlayerOrder playerOrder = player.getPlayerOrder();
-
-        if (!menu.takeReward(playerOrder, choice)) {
-            return false;
-        }
-
-        player.getPlayerBoard().giveEffect(new Effect[]{choice});
-        return true;
+        return menu.takeReward(playerOrder, choice);
     }
 }
