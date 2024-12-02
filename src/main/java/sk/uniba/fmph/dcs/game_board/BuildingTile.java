@@ -7,10 +7,12 @@ import java.util.*;
 
 public class BuildingTile implements InterfaceFigureLocationInternal {
     private final ArrayList<PlayerOrder> figures;
+    private final Building building; // na kazdej BuildingTile sa nachadza nejaky building
 
-    public BuildingTile(Collection<PlayerOrder> figures) {
+    public BuildingTile(Collection<PlayerOrder> figures, Building building) {
         this.figures = new ArrayList<>();
         this.figures.addAll(figures);
+        this.building = building;
     }
 
     public String state() {
@@ -23,6 +25,19 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
 
         Map<String, String> buildingState = new LinkedHashMap<>();
         buildingState.put("building tile state", occupiedState.toString());
+
+        String buildingType;
+        if(building instanceof VariableBuilding) {
+            buildingType = "variable building";
+        } else if(building instanceof SimpleBuilding) {
+            buildingType = "simple building";
+        } else if(building instanceof ArbitraryBuilding) {
+            buildingType = "arbitrary building";
+        } else {
+            throw new IllegalArgumentException("Unknown type of building.");
+        }
+
+        buildingState.put("type of building", buildingType);
         buildingState.put("player count", String.valueOf(figures.size()));
         for(PlayerOrder figure: figures) {
             buildingState.put("player", String.valueOf(figure.getOrder()));
@@ -60,8 +75,16 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
         if(!tookResourcesFromPlayer) {
             return ActionResult.FAILURE;
         }
-        player.getPlayerBoard().giveEffect(inputResources.toArray(new Effect[]{}));
-        player.getPlayerBoard().giveEffect(new Effect[]{Effect.BUILDING});
+
+        // treba zistit, ci konkretny building ide postavit z danych inputResources
+        OptionalInt buildingPoints = building.build(inputResources);
+        if(buildingPoints.isEmpty()) {
+            throw new IllegalArgumentException("Failed to calculate building score.");
+        } else {
+            player.getPlayerBoard().giveEffect(new Effect[]{Effect.BUILDING});
+            player.getPlayerBoard().giveEffect(inputResources.toArray(new Effect[]{}));
+        }
+
         return ActionResult.ACTION_DONE;
     }
 
