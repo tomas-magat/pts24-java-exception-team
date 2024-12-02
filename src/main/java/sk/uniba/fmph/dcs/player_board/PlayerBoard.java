@@ -76,9 +76,15 @@ public class PlayerBoard implements InterfaceGetState {
             houses,
             tools.getToolCount(),
             fedStatus.getFields(),
-            figures.totalFigures()
+            figures.getTotalFigures()
         );
         points += resourcesAndFood.numberOfResourcesForFinalPoints();
+    }
+
+    public void newTurn(){
+        tools.newTurn();
+        figures.newTurn();
+        fedStatus.newTurn();
     }
 
     @Override
