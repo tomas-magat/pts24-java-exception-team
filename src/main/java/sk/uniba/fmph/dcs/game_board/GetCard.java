@@ -1,7 +1,7 @@
 package sk.uniba.fmph.dcs.game_board;
 
 import sk.uniba.fmph.dcs.stone_age.CivilisationCard;
-import sk.uniba.fmph.dcs.stone_age.ImmediateEffect;
+import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.InterfacePlayerBoardGameBoard;
 
 public class GetCard implements EvaluateCivilisationCardImmediateEffect {
@@ -14,7 +14,7 @@ public class GetCard implements EvaluateCivilisationCardImmediateEffect {
     }
 
     @Override
-    public boolean performEffect(Player player, ImmediateEffect choice) {
+    public boolean performEffect(Player player, Effect choice) {
         currentThrow.initiate(player, null, 0);
 
         CivilisationCard deckTopCard;
