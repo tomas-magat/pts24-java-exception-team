@@ -19,7 +19,7 @@ public class PlaceOnToolMakerAdaptor implements InterfaceFigureLocationInternal 
 
     @Override
     public HasAction tryToPlaceFigures(Player player, int count) {
-        if (count < 1 || !player.getPlayerBoard().hasFigures(count)) {
+        if (count != 1 || !player.getPlayerBoard().hasFigures(count)) {
             return HasAction.NO_ACTION_POSSIBLE;
         }
         return toolMakerHutFields.canPlaceOnToolMaker(player) ? HasAction.WAITING_FOR_PLAYER_ACTION : HasAction.NO_ACTION_POSSIBLE;
