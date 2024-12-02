@@ -27,11 +27,13 @@ public class TribeFedStatusTest {
         PlayerResourcesAndFood playerResourcesAndFood = new PlayerResourcesAndFood();
         TribeFedStatus tribeFedStatus = new TribeFedStatus(playerFigures, playerResourcesAndFood);
 
+        assertFalse(tribeFedStatus.isTribeFed()); // tribe should not be fed at the start
+
+        assertTrue(tribeFedStatus.setTribeFed());
+
         assertTrue(tribeFedStatus.isTribeFed()); // tribe should not be fed at the start
 
-        assertFalse(tribeFedStatus.setTribeFed());
-
-        assertTrue(tribeFedStatus.isTribeFed()); // we dont need to remove 10 points now
+        assertFalse(tribeFedStatus.setTribeFed()); // we dont need to remove 10 points now
     }
 
     @Test
