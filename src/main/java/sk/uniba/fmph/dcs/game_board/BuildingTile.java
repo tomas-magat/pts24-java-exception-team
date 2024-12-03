@@ -85,6 +85,14 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
             player.getPlayerBoard().giveEffect(inputResources.toArray(new Effect[]{}));
         }
 
+        // po skonceni akcie si hrac zoberie naspat figurku
+        for(PlayerOrder figure: figures) {
+            if(figure.getOrder() == player.getPlayerOrder().getOrder()) {
+                figures.remove(figure);
+                player.getPlayerBoard().addNewFigure();
+            }
+        }
+
         return ActionResult.ACTION_DONE;
     }
 
