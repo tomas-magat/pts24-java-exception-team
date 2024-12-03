@@ -8,19 +8,23 @@ import java.util.*;
 public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
 
     private CivilizationCardDeck cardDeck;
-    private CivilizationCardPlace nextCivilizationCard;
+    private CivilizationCardPlace nextCivilizationCard, prevCivilizationCard;
     private int requiredResources;
     private List<PlayerOrder> figures;
     private CivilisationCard civilisationCard;
     private boolean endOfGame = false;
+    private Map<CivilisationCard, EvaluateCivilisationCardImmediateEffect> cardEffectMap;
+    private boolean used;
 
-    public CivilizationCardPlace(int requiredResources, CivilizationCardDeck cardDeck, CivilizationCardPlace nextCivilizationCard) {
+    public CivilizationCardPlace(int requiredResources, CivilizationCardDeck cardDeck,
+                                 Map<CivilisationCard, EvaluateCivilisationCardImmediateEffect> cardEffectMap) {
         this.requiredResources = requiredResources;
         this.cardDeck = cardDeck;
-        this.nextCivilizationCard = nextCivilizationCard;
         this.figures = new ArrayList<>();
         Optional<CivilisationCard> opt = cardDeck.getTop();
         this.civilisationCard = opt.get(); // assume there are at least 4 cards in deck
+        this.cardEffectMap = cardEffectMap;
+        used = false;
     }
 
     @Override
@@ -42,8 +46,13 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
         if (inputResources.size() < requiredResources) return ActionResult.FAILURE;
         if (tryToMakeAction(player) == HasAction.NO_ACTION_POSSIBLE) return ActionResult.FAILURE;
 
-        Effect[] payment = new Effect[inputResources.size()];
-        inputResources.toArray(payment);
+        Effect[] payment = new Effect[requiredResources];
+        int p = 0;
+        // take the right amount of inputResources as payment
+        for (Effect e : inputResources) {
+            if (p >= requiredResources) break;
+            payment[p] = e;
+        }
         boolean taken = player.getPlayerBoard().takeResources(payment);
         if (!taken) { // player didn't have enough resources
             return ActionResult.FAILURE;
@@ -53,7 +62,60 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
         player.getPlayerBoard().takeFigures(-1);
         // TODO evaluate effects
         // TODO end of game effects
+        if (cardEffectMap.containsKey(civilisationCard)) {
+            EvaluateCivilisationCardImmediateEffect eval = cardEffectMap.get(civilisationCard);
 
+            if (civilisationCard.getImmediateEffect()[0] == ImmediateEffect.ArbitraryResource) {
+//                eval.performEffect(player, new Effect[] {})
+                // inputResources nemoze byt Collection
+            }
+
+            Effect e;
+            switch (civilisationCard.getImmediateEffect()[0]) {
+                case Wood:
+                    e = Effect.WOOD;
+                    break;
+                case Clay:
+                    e = Effect.CLAY;
+                    break;
+                case Stone:
+                    e = Effect.STONE;
+                    break;
+                case Gold:
+                    e = Effect.GOLD;
+                    break;
+                case ThrowWood:
+                    e = Effect.WOOD;
+                    break;
+                case ThrowClay:
+                    e = Effect.CLAY;
+                    break;
+                case ThrowStone:
+                    e = Effect.STONE;
+                    break;
+                case ThrowGold:
+                    e = Effect.GOLD;
+                    break;
+                case Food:
+                    e = Effect.FOOD;
+                    break;
+                default:
+                    e = null;
+                    break;
+
+            }
+            if (!eval.performEffect(player, e)) {
+                // problem
+                throw new RuntimeException("nepodarilo sa performEffect(): ");
+            }
+            player.getPlayerBoard().giveEndOfGameEffect(civilisationCard.getEndOfGameEffect());
+
+        } else {
+            // problem
+            throw new RuntimeException("CivilizationCard not found in map: " + civilisationCard.toString());
+        }
+
+        civilisationCard = null;
 
         return ActionResult.ACTION_DONE;
     }
@@ -69,6 +131,7 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
 
     @Override
     public HasAction tryToMakeAction(Player player) {
+        if (used) return HasAction.NO_ACTION_POSSIBLE;
         return !figures.contains(player.getPlayerOrder()) ? HasAction.NO_ACTION_POSSIBLE : HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 
@@ -76,13 +139,20 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
     @Override
     public boolean newTurn() {
         figures.clear();
-        if (nextCivilizationCard != null) {
-            if (nextCivilizationCard.civilisationCard == null) {
-                nextCivilizationCard.civilisationCard = this.civilisationCard;
+        if (civilisationCard == null) {
+            CivilizationCardPlace place = this;
+            while (place.prevCivilizationCard != null && place.prevCivilizationCard.civilisationCard == null) {
+                place = place.prevCivilizationCard;
             }
+
+            if (place.prevCivilizationCard != null) {
+                this.civilisationCard = place.prevCivilizationCard.civilisationCard;
+                place.prevCivilizationCard.civilisationCard = null;
+            }
+
         }
 
-        if (requiredResources == 4) { // this is the first card
+        if (requiredResources == 4) { // this is the left-most card
             // fill all empty card places with cards from the deck (or null, in that case set endOfGame=true)
             if (nextCivilizationCard.nextCivilizationCard.nextCivilizationCard.civilisationCard == null)
                 nextCivilizationCard.nextCivilizationCard.nextCivilizationCard.civilisationCard = getCardOrNull();
@@ -97,7 +167,7 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
                 civilisationCard = getCardOrNull();
 
         }
-        return endOfGame; // TODO
+        return endOfGame;
     }
 
     public String state() {
@@ -116,5 +186,14 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
         } else {
             return opt.get();
         }
+    }
+
+    public CivilisationCard getCivilisationCard() {
+        return civilisationCard;
+    }
+
+    public void setup(CivilizationCardPlace next, CivilizationCardPlace prev) {
+        this.nextCivilizationCard = next;
+        this.prevCivilizationCard = prev;
     }
 }

@@ -25,4 +25,25 @@ public class CivilisationCard {
         return endOfGameEffect;
     }
 
+    @Override
+    public boolean equals(final Object obj) throws IllegalArgumentException {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CivilisationCard other = (CivilisationCard) obj;
+        if (!Arrays.equals(immediateEffect, other.immediateEffect)) {
+            return false;
+        }
+        if (!Arrays.equals(endOfGameEffect, other.endOfGameEffect)) {
+            return false;
+        }
+        return true;
+    }
+
 }
