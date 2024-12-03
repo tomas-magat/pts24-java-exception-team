@@ -71,6 +71,10 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
 
     @Override
     public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+        if(tryToMakeAction(player) == HasAction.NO_ACTION_POSSIBLE) {
+            return ActionResult.FAILURE;
+        }
+
         boolean tookResourcesFromPlayer = player.getPlayerBoard().takeResources(inputResources.toArray(new Effect[]{}));
         if(!tookResourcesFromPlayer) {
             return ActionResult.FAILURE;
