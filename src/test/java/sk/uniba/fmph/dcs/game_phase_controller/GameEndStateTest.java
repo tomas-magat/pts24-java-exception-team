@@ -19,6 +19,6 @@ public class GameEndStateTest {
     @Test
     public void testTryToMakeAutomaticAction() {
 
-        assertEquals(gameEndState.tryToMakeAutomaticAction(new PlayerOrder(0,1)), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, gameEndState.tryToMakeAutomaticAction(new PlayerOrder(0,1)));
     }
 }
