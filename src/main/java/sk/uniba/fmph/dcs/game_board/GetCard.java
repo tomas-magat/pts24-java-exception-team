@@ -4,6 +4,8 @@ import sk.uniba.fmph.dcs.stone_age.CivilisationCard;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.InterfacePlayerBoardGameBoard;
 
+import java.util.Optional;
+
 public class GetCard implements EvaluateCivilisationCardImmediateEffect {
     private final InterfaceCurrentThrow currentThrow;
     private final InterfaceCivilizationCardDeck cardDeck;
@@ -17,11 +19,12 @@ public class GetCard implements EvaluateCivilisationCardImmediateEffect {
     public boolean performEffect(Player player, Effect choice) {
         currentThrow.initiate(player, null, 0);
 
+        Optional<CivilisationCard> deckTop = cardDeck.getTop();
         CivilisationCard deckTopCard;
-        if(cardDeck.getTop().isEmpty()) {
+        if(deckTop.isEmpty()) {
             return false;
         } else {
-            deckTopCard = cardDeck.getTop().get();
+            deckTopCard = deckTop.get();
         }
 
         InterfacePlayerBoardGameBoard playerBoard = player.getPlayerBoard();
