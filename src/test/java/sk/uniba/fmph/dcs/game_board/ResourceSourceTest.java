@@ -246,6 +246,22 @@ public class ResourceSourceTest {
 
     private static class CurrentThrowMock implements InterfaceCurrentThrow {
         public int expectedThrowResult;
+
+        @Override
+        public boolean useTool(int idx) {
+            return false;
+        }
+
+        @Override
+        public boolean canUseTools() {
+            return false;
+        }
+
+        @Override
+        public boolean finishUsingTools() {
+            return false;
+        }
+
         @Override
         public void initiate(Player player, Effect effect, int dices) {
             // nothing to see here...

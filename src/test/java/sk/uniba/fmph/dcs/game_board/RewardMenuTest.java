@@ -18,7 +18,8 @@ public class RewardMenuTest {
         List<Player> players = List.of(player1, player2);
 
         List<Effect> rewards = List.of(Effect.FOOD, Effect.WOOD);
-        RewardMenu rewardMenu = new RewardMenu(rewards, players);
+        RewardMenu rewardMenu = new RewardMenu(players);
+        rewardMenu.initiate(rewards);
 
         String menuState = rewardMenu.state();
         assertTrue("State should include FOOD", menuState.contains("FOOD"));
@@ -34,7 +35,8 @@ public class RewardMenuTest {
         List<Player> players = List.of(player1, player2);
 
         List<Effect> rewards = List.of(Effect.FOOD, Effect.WOOD);
-        RewardMenu rewardMenu = new RewardMenu(rewards, players);
+        RewardMenu rewardMenu = new RewardMenu(players);
+        rewardMenu.initiate(rewards);
 
         // Player 1 takes FOOD
         assertTrue("Player 1 should be able to take FOOD", rewardMenu.takeReward(player1.getPlayerOrder(), Effect.FOOD));
@@ -54,7 +56,8 @@ public class RewardMenuTest {
         List<Player> players = List.of(player1, player2);
 
         List<Effect> rewards = List.of(Effect.FOOD, Effect.WOOD);
-        RewardMenu rewardMenu = new RewardMenu(rewards, players);
+        RewardMenu rewardMenu = new RewardMenu(players);
+        rewardMenu.initiate(rewards);
 
         // Case 1: Player 1 has options available
         assertEquals(

@@ -4,5 +4,5 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.ImmediateEffect;
 
 public interface EvaluateCivilisationCardImmediateEffect {
-    boolean performEffect(Player player, ImmediateEffect choice);
+    boolean performEffect(Player player, Effect choice);
 }

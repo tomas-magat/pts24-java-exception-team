@@ -15,7 +15,9 @@ public class CivilizationCardPlaceTest {
     PlayerOrder playerOrder1, playerOrder2;
     CivilizationCardPlace civilizationCardPlace1, civilizationCardPlace2, civilizationCardPlace3, civilizationCardPlace4;
     CivilizationCardDeck civilizationCardDeck;
-    Map<CivilisationCard, EvaluateCivilisationCardImmediateEffect> cardEffectMap;
+    CurrentThrowMock currentThrowMock;
+    RewardMenuMock rewardMenuMock;
+    ThrowMock throwMock;
 
 
     @Before
@@ -37,14 +39,14 @@ public class CivilizationCardPlaceTest {
         stack.add(new CivilisationCard(new ImmediateEffect[]{ImmediateEffect.Clay}, new EndOfGameEffect[]{EndOfGameEffect.Pottery}));
         civilizationCardDeck = new CivilizationCardDeck(stack);
 
-        cardEffectMap = new HashMap<>();
-        for (int i = 0; i < 8; i++)
-            cardEffectMap.put(stack.get(i), new EvaluateMock());
+        throwMock = new ThrowMock();
+        currentThrowMock = new CurrentThrowMock();
+        rewardMenuMock = new RewardMenuMock();
 
-        civilizationCardPlace1 = new CivilizationCardPlace(1, civilizationCardDeck, cardEffectMap);
-        civilizationCardPlace2 = new CivilizationCardPlace(2, civilizationCardDeck, cardEffectMap);
-        civilizationCardPlace3 = new CivilizationCardPlace(3, civilizationCardDeck, cardEffectMap);
-        civilizationCardPlace4 = new CivilizationCardPlace(4, civilizationCardDeck, cardEffectMap);
+        civilizationCardPlace1 = new CivilizationCardPlace(1, civilizationCardDeck, currentThrowMock, rewardMenuMock, throwMock);
+        civilizationCardPlace2 = new CivilizationCardPlace(2, civilizationCardDeck, currentThrowMock, rewardMenuMock, throwMock);
+        civilizationCardPlace3 = new CivilizationCardPlace(3, civilizationCardDeck, currentThrowMock, rewardMenuMock, throwMock);
+        civilizationCardPlace4 = new CivilizationCardPlace(4, civilizationCardDeck, currentThrowMock, rewardMenuMock, throwMock);
 
         civilizationCardPlace1.setup(null, civilizationCardPlace2);
         civilizationCardPlace2.setup(civilizationCardPlace1, civilizationCardPlace3);
@@ -89,6 +91,7 @@ public class CivilizationCardPlaceTest {
 
     @Test
     public void testMakeAction() {
+        System.out.println("testMakeAction()");
         Collection<Effect> inputResources = new ArrayList<>(Arrays.asList(Effect.WOOD));
         Collection<Effect> outputResources = new ArrayList<>();
 
@@ -99,15 +102,45 @@ public class CivilizationCardPlaceTest {
         assertEquals(civilizationCardPlace1.makeAction(player1, inputResources, outputResources), ActionResult.FAILURE); // player has no resources
 
         playerBoardMock1.expectedHasResources = true;
-        CivilisationCard card1 = civilizationCardPlace1.getCivilisationCard();
         assertEquals(civilizationCardPlace1.makeAction(player2, inputResources, outputResources), ActionResult.FAILURE);
         assertEquals(civilizationCardPlace1.makeAction(player1, inputResources, outputResources), ActionResult.ACTION_DONE);
         assertEquals(playerBoardMock1.takeFiguresAmount, -1);
         assertArrayEquals(playerBoardMock1.takenResources, new Effect[] {Effect.WOOD});
 
-        EvaluateMock eval = (EvaluateMock) cardEffectMap.get(card1);
-        assertEquals(eval.effect, Effect.CLAY);
+//        EvaluateMock eval = (EvaluateMock) cardEffectMap.get(card1);
+//        assertEquals(eval.effect, Effect.CLAY);
         assertArrayEquals(playerBoardMock1.givenEndOfGameEffects, new EndOfGameEffect[] {EndOfGameEffect.Pottery});
+
+        ///////
+        inputResources = new ArrayList<>(Arrays.asList(Effect.WOOD, Effect.STONE));
+        outputResources.clear();
+        playerBoardMock2.expectedHasFigures = true;
+        playerBoardMock2.expectedHasResources = true;
+        playerBoardMock2.takeFiguresAmount = 0;
+        playerBoardMock2.takenResources = null;
+        currentThrowMock.initiateEffect = null;
+        assertTrue(civilizationCardPlace2.placeFigures(player2, 1));
+        assertEquals(playerBoardMock2.takeFiguresAmount, 1);
+        assertEquals(civilizationCardPlace2.makeAction(player2, inputResources, outputResources), ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE);
+        assertEquals(playerBoardMock2.takeFiguresAmount, -1);
+        assertArrayEquals(playerBoardMock2.takenResources, new Effect[] {Effect.WOOD, Effect.STONE});
+        assertEquals(currentThrowMock.initiateEffect, Effect.STONE); // initiate was called with Effect.STONE
+
+        ///////
+        inputResources = new ArrayList<>(Arrays.asList(Effect.WOOD, Effect.STONE, Effect.GOLD, Effect.WOOD));
+        outputResources = new ArrayList<>(Arrays.asList(Effect.GOLD, Effect.WOOD));
+        playerBoardMock2.expectedHasFigures = true;
+        playerBoardMock2.expectedHasResources = true;
+        playerBoardMock2.takeFiguresAmount = 0;
+        playerBoardMock2.takenResources = null;
+        currentThrowMock.initiateEffect = null;
+        assertTrue(civilizationCardPlace4.placeFigures(player2, 1));
+        assertEquals(playerBoardMock2.takeFiguresAmount, 1);
+        assertEquals(civilizationCardPlace4.makeAction(player2, inputResources, outputResources), ActionResult.ACTION_DONE);
+        assertEquals(playerBoardMock2.takeFiguresAmount, -1);
+        assertArrayEquals(playerBoardMock2.takenResources, new Effect[] {Effect.WOOD, Effect.STONE, Effect.GOLD, Effect.WOOD});
+
+        System.out.println("end testMakeAction()");
     }
 
     @Test
@@ -126,7 +159,7 @@ public class CivilizationCardPlaceTest {
         civilizationCardPlace2.placeFigures(player2, 1);
 
         assertEquals(civilizationCardPlace1.makeAction(player1, inputResources1, outputResources1), ActionResult.ACTION_DONE);
-        assertEquals(civilizationCardPlace2.makeAction(player2, inputResources2, outputResources2), ActionResult.ACTION_DONE);
+        assertEquals(civilizationCardPlace2.makeAction(player2, inputResources2, outputResources2), ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE);
 
         assertFalse(civilizationCardPlace1.newTurn());
         assertFalse(civilizationCardPlace2.newTurn());
@@ -154,8 +187,8 @@ public class CivilizationCardPlaceTest {
         playerBoardMock2.expectedHasResources = true;
         civilizationCardPlace3.placeFigures(player2, 1);
 
-        assertEquals(civilizationCardPlace2.makeAction(player1, inputResources1, outputResources1), ActionResult.ACTION_DONE);
-        assertEquals(civilizationCardPlace3.makeAction(player2, inputResources2, outputResources2), ActionResult.ACTION_DONE);
+        assertEquals(civilizationCardPlace2.makeAction(player1, inputResources1, outputResources1), ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE);
+        assertEquals(civilizationCardPlace3.makeAction(player2, inputResources2, outputResources2), ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD);
 
         assertFalse(civilizationCardPlace1.newTurn());
         assertFalse(civilizationCardPlace2.newTurn());
@@ -190,10 +223,10 @@ public class CivilizationCardPlaceTest {
         civilizationCardPlace4.placeFigures(player2, 1);
 
 
-        assertEquals(civilizationCardPlace3.makeAction(player1, inputResources3, outputResources3), ActionResult.ACTION_DONE);
+        assertEquals(civilizationCardPlace3.makeAction(player1, inputResources3, outputResources3), ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD);
         assertEquals(civilizationCardPlace4.makeAction(player2, inputResources4, outputResources4), ActionResult.ACTION_DONE);
         assertEquals(civilizationCardPlace1.makeAction(player1, inputResources1, outputResources1), ActionResult.ACTION_DONE);
-        assertEquals(civilizationCardPlace2.makeAction(player2, inputResources2, outputResources2), ActionResult.ACTION_DONE);
+        assertEquals(civilizationCardPlace2.makeAction(player2, inputResources2, outputResources2), ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE);
 
         assertFalse(civilizationCardPlace1.newTurn());
         assertFalse(civilizationCardPlace2.newTurn());
@@ -288,6 +321,73 @@ public class CivilizationCardPlaceTest {
         public boolean performEffect(Player player, Effect choice) {
             this.effect = choice;
             return expectedPerformEffect;
+        }
+    }
+
+    private static class CurrentThrowMock implements InterfaceCurrentThrow {
+        public int expectedThrowResult;
+        public Effect initiateEffect;
+        @Override
+        public void initiate(Player player, Effect effect, int dices) {
+            this.initiateEffect = effect;
+        }
+
+        @Override
+        public int getThrowResult() {
+            return expectedThrowResult;
+        }
+
+        @Override
+        public String state() {
+            return null; // don't need
+        }
+
+        @Override
+        public boolean useTool(int idx) {
+            return false;
+        }
+
+        @Override
+        public boolean canUseTools() {
+            return false;
+        }
+
+        @Override
+        public boolean finishUsingTools() {
+            return false;
+        }
+    }
+
+    private static class RewardMenuMock implements InterfaceRewardMenu {
+
+        public boolean expectedTakeReward;
+        public HasAction expectedTryMakeAction;
+        @Override
+        public boolean takeReward(PlayerOrder player, Effect reward) {
+            return expectedTakeReward;
+        }
+
+        @Override
+        public HasAction tryMakeAction(PlayerOrder player) {
+            return expectedTryMakeAction;
+        }
+
+        @Override
+        public void initiate(List<Effect> menu) {
+
+        }
+
+        @Override
+        public String state() {
+            return null;
+        }
+    }
+
+    private static class ThrowMock implements InterfaceThrow {
+        public int[] expected;
+        @Override
+        public int[] throwDices(int players) {
+            return expected;
         }
     }
 }

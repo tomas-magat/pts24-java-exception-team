@@ -3,6 +3,8 @@ package sk.uniba.fmph.dcs.game_board;
 import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.*;
 
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
+import javax.swing.*;
 import java.util.*;
 
 public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
@@ -13,18 +15,21 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
     private List<PlayerOrder> figures;
     private CivilisationCard civilisationCard;
     private boolean endOfGame = false;
-    private Map<CivilisationCard, EvaluateCivilisationCardImmediateEffect> cardEffectMap;
-    private boolean used;
+//    private Map<CivilisationCard, EvaluateCivilisationCardImmediateEffect> cardEffectMap;
+    private InterfaceCurrentThrow currentThrow;
+    private InterfaceRewardMenu rewardMenu;
+    private InterfaceThrow throwDices;
 
-    public CivilizationCardPlace(int requiredResources, CivilizationCardDeck cardDeck,
-                                 Map<CivilisationCard, EvaluateCivilisationCardImmediateEffect> cardEffectMap) {
+    public CivilizationCardPlace(int requiredResources, CivilizationCardDeck cardDeck, InterfaceCurrentThrow currentThrow,
+                                 InterfaceRewardMenu rewardMenu, InterfaceThrow throwDices) {
         this.requiredResources = requiredResources;
         this.cardDeck = cardDeck;
         this.figures = new ArrayList<>();
         Optional<CivilisationCard> opt = cardDeck.getTop();
+        this.currentThrow = currentThrow;
+        this.rewardMenu = rewardMenu;
         this.civilisationCard = opt.get(); // assume there are at least 4 cards in deck
-        this.cardEffectMap = cardEffectMap;
-        used = false;
+        this.throwDices = throwDices;
     }
 
     @Override
@@ -52,7 +57,9 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
         for (Effect e : inputResources) {
             if (p >= requiredResources) break;
             payment[p] = e;
+            p++;
         }
+        if (p != requiredResources) return ActionResult.FAILURE; // wrong amount of resources given
         boolean taken = player.getPlayerBoard().takeResources(payment);
         if (!taken) { // player didn't have enough resources
             return ActionResult.FAILURE;
@@ -60,64 +67,82 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
 
         figures.remove(player.getPlayerOrder());
         player.getPlayerBoard().takeFigures(-1);
-        // TODO evaluate effects
-        // TODO end of game effects
-        if (cardEffectMap.containsKey(civilisationCard)) {
-            EvaluateCivilisationCardImmediateEffect eval = cardEffectMap.get(civilisationCard);
 
-            if (civilisationCard.getImmediateEffect()[0] == ImmediateEffect.ArbitraryResource) {
-//                eval.performEffect(player, new Effect[] {})
-                // inputResources nemoze byt Collection
-            }
+        // end of game effects
+        for (EndOfGameEffect endOfGameEffect : civilisationCard.getEndOfGameEffect()) {
+            player.getPlayerBoard().giveEndOfGameEffect(new EndOfGameEffect[] {endOfGameEffect});
+        }
 
-            Effect e;
-            switch (civilisationCard.getImmediateEffect()[0]) {
+        ActionResult returnValue = ActionResult.ACTION_DONE;
+        for (ImmediateEffect immediateEffect : civilisationCard.getImmediateEffect()) {
+            EvaluateCivilisationCardImmediateEffect eval;
+            switch (immediateEffect) {
                 case Wood:
-                    e = Effect.WOOD;
+                    eval = new GetSomethingFixed(Arrays.asList(Effect.WOOD));
+                    eval.performEffect(player, Effect.WOOD);
                     break;
                 case Clay:
-                    e = Effect.CLAY;
+                    eval = new GetSomethingFixed(Arrays.asList(Effect.CLAY));
+                    eval.performEffect(player, Effect.CLAY);
                     break;
                 case Stone:
-                    e = Effect.STONE;
+                    eval = new GetSomethingFixed(Arrays.asList(Effect.STONE));
+                    eval.performEffect(player, Effect.STONE);
                     break;
                 case Gold:
-                    e = Effect.GOLD;
-                    break;
-                case ThrowWood:
-                    e = Effect.WOOD;
-                    break;
-                case ThrowClay:
-                    e = Effect.CLAY;
-                    break;
-                case ThrowStone:
-                    e = Effect.STONE;
-                    break;
-                case ThrowGold:
-                    e = Effect.GOLD;
+                    eval = new GetSomethingFixed(Arrays.asList(Effect.GOLD));
+                    eval.performEffect(player, Effect.GOLD);
                     break;
                 case Food:
-                    e = Effect.FOOD;
+                    eval = new GetSomethingFixed(Arrays.asList(Effect.FOOD));
+                    eval.performEffect(player, Effect.FOOD);
                     break;
-                default:
-                    e = null;
+                case Point:
+                    eval = new GetSomethingFixed(Arrays.asList(Effect.BUILDING));
+                    eval.performEffect(player, Effect.BUILDING);
+                    break;
+                case ThrowWood:
+                    eval = new GetSomethingThrow(Effect.WOOD, currentThrow);
+                    eval.performEffect(player, Effect.WOOD);
+                    returnValue = ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
+                    break;
+                case ThrowClay:
+                    eval = new GetSomethingThrow(Effect.CLAY, currentThrow);
+                    eval.performEffect(player, Effect.CLAY);
+                    returnValue = ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
+                    break;
+                case ThrowStone:
+                    eval = new GetSomethingThrow(Effect.STONE, currentThrow);
+                    eval.performEffect(player, Effect.STONE);
+                    returnValue = ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
+                    break;
+                case ThrowGold:
+                    eval = new GetSomethingThrow(Effect.GOLD, currentThrow);
+                    eval.performEffect(player, Effect.GOLD);
+                    returnValue = ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
+                    break;
+                case Card:
+                    eval = new GetCard(currentThrow, cardDeck);
+                    eval.performEffect(player, null); // Effect is null
+                    break;
+                case ArbitraryResource:
+                    eval = new GetChoice();
+                    for (Effect e : outputResources) {
+                        eval.performEffect(player, e); // check is done in GetChoice
+                    }
+                    break;
+                case AllPlayersTakeReward:
+                    eval = new AllPlayersTakeReward(player.getPlayerOrder().getPlayers(), rewardMenu, throwDices);
+                    eval.performEffect(player, null);
+                    returnValue = ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD;
                     break;
 
             }
-            if (!eval.performEffect(player, e)) {
-                // problem
-                throw new RuntimeException("nepodarilo sa performEffect(): ");
-            }
-            player.getPlayerBoard().giveEndOfGameEffect(civilisationCard.getEndOfGameEffect());
-
-        } else {
-            // problem
-            throw new RuntimeException("CivilizationCard not found in map: " + civilisationCard.toString());
         }
 
         civilisationCard = null;
 
-        return ActionResult.ACTION_DONE;
+        return returnValue;
     }
 
     @Override
@@ -131,7 +156,7 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
 
     @Override
     public HasAction tryToMakeAction(Player player) {
-        if (used) return HasAction.NO_ACTION_POSSIBLE;
+        if (civilisationCard == null) return HasAction.NO_ACTION_POSSIBLE;
         return !figures.contains(player.getPlayerOrder()) ? HasAction.NO_ACTION_POSSIBLE : HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 

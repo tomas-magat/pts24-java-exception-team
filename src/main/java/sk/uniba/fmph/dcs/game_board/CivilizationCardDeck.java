@@ -5,7 +5,7 @@ import sk.uniba.fmph.dcs.stone_age.CivilisationCard;
 
 import java.util.*;
 
-public class CivilizationCardDeck {
+public class CivilizationCardDeck implements InterfaceCivilizationCardDeck {
 
     private Stack<CivilisationCard> stack;
 
@@ -13,6 +13,7 @@ public class CivilizationCardDeck {
         this.stack = stack;
     }
 
+    @Override
     public Optional<CivilisationCard> getTop() {
         if (stack.isEmpty()) {
             return Optional.empty();
