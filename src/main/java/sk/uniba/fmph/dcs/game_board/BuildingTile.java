@@ -1,5 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.*;
 
@@ -7,11 +8,14 @@ import java.util.*;
 
 public class BuildingTile implements InterfaceFigureLocationInternal {
     private final ArrayList<PlayerOrder> figures;
+    private final Collection<Effect> depictedResources;
     private final Building building; // na kazdej BuildingTile sa nachadza nejaky building
 
-    public BuildingTile(Collection<PlayerOrder> figures, Building building) {
+    public BuildingTile(Collection<PlayerOrder> figures,
+                        Collection<Effect> depictedResources, Building building) {
         this.figures = new ArrayList<>();
         this.figures.addAll(figures);
+        this.depictedResources = depictedResources;
         this.building = building;
     }
 
@@ -72,6 +76,10 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
     @Override
     public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         if(tryToMakeAction(player) == HasAction.NO_ACTION_POSSIBLE) {
+            return ActionResult.FAILURE;
+        }
+
+        if(!CollectionUtils.isEqualCollection(inputResources, depictedResources)) {
             return ActionResult.FAILURE;
         }
 
