@@ -1,6 +1,10 @@
 package sk.uniba.fmph.dcs.stone_age;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CivilisationCard {
     private ImmediateEffect[] immediateEffect;
@@ -46,4 +50,11 @@ public class CivilisationCard {
         return true;
     }
 
+    @Override
+    public String toString() {
+        Map<String, String> map = new HashMap<>();
+        map.put("ImmediateEffect", immediateEffect.toString());
+        map.put("EndOfGameEffect", endOfGameEffect.toString());
+        return new JSONObject(map).toString();
+    }
 }

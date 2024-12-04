@@ -99,7 +99,7 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
                     break;
                 case Point:
                     eval = new GetSomethingFixed(Arrays.asList(Effect.BUILDING));
-                    eval.performEffect(player, Effect.BUILDING);
+                    eval.performEffect(player, Effect.BUILDING); // TODO not Building
                     break;
                 case ThrowWood:
                     eval = new GetSomethingThrow(Effect.WOOD, currentThrow);
@@ -133,7 +133,7 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
                     break;
                 case AllPlayersTakeReward:
                     eval = new AllPlayersTakeReward(player.getPlayerOrder().getPlayers(), rewardMenu, throwDices);
-                    eval.performEffect(player, null);
+//                    eval.performEffect(player, null);
                     returnValue = ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD;
                     break;
 
