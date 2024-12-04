@@ -10,20 +10,21 @@ import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RewardMenu implements InterfaceTakeReward {
+public class RewardMenu implements InterfaceRewardMenu {
     private final List<Effect> menu;
     private final List<Player> players;
     private final List<PlayerOrder> playersLeft; // players who haven't collected their reward yet
 
-    public RewardMenu(final List<Effect> menu, final List<Player> players) {
+    public RewardMenu(final List<Player> players) {
         this.players = new ArrayList<>();
         this.players.addAll(players);
 
         this.menu = new ArrayList<>();
         playersLeft = new ArrayList<>();
-        initiate(menu);
+//        initiate(menu);
     }
 
+    @Override
     public void initiate(final List<Effect> menu) {
         this.menu.clear();
         this.menu.addAll(menu);
@@ -35,6 +36,7 @@ public class RewardMenu implements InterfaceTakeReward {
         return playersLeft.size();
     }
 
+    @Override
     public String state() {
         JSONObject state = new JSONObject();
 
