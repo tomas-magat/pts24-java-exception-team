@@ -55,14 +55,12 @@ class PlayerBoardMock implements InterfacePlayerBoardGameBoard {
 }
 
 public class BuildingTileTest {
-    List<Effect> depictedResources = List.of(Effect.WOOD, Effect.WOOD, Effect.STONE);
-
     @Test
     public void testOccupiedState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new SimpleBuilding(List.of(Effect.WOOD));
         figures.add(new PlayerOrder(4, 6));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "occupied");
@@ -78,7 +76,7 @@ public class BuildingTileTest {
     public void testEmptyState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new SimpleBuilding(List.of(Effect.WOOD));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "unoccupied");
@@ -93,7 +91,7 @@ public class BuildingTileTest {
     public void testBuildingWithMoreResources() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new SimpleBuilding(List.of(Effect.WOOD, Effect.STONE, Effect.GOLD));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "unoccupied");
@@ -108,7 +106,7 @@ public class BuildingTileTest {
     public void testVariableBuilding() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new VariableBuilding(1, 1);
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "unoccupied");
@@ -120,7 +118,7 @@ public class BuildingTileTest {
 
 
         building = new VariableBuilding(7, 4);
-        buildingTile = new BuildingTile(figures, depictedResources, building);
+        buildingTile = new BuildingTile(figures, building);
 
         expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "unoccupied");
@@ -135,7 +133,7 @@ public class BuildingTileTest {
     public void testArbitraryBuilding() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new ArbitraryBuilding(3);
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "unoccupied");
@@ -153,7 +151,7 @@ public class BuildingTileTest {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         figures.add(player.getPlayerOrder());
         Building building = new SimpleBuilding(List.of(Effect.WOOD));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertEquals(buildingTile.tryToPlaceFigures(player, 0), HasAction.NO_ACTION_POSSIBLE);
         assertEquals(buildingTile.tryToPlaceFigures(player, 1), HasAction.NO_ACTION_POSSIBLE);
@@ -168,7 +166,7 @@ public class BuildingTileTest {
         Player player = new Player(new PlayerOrder(4, 6), pbm);
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new SimpleBuilding(List.of(Effect.WOOD));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertEquals(buildingTile.tryToPlaceFigures(player, 0), HasAction.WAITING_FOR_PLAYER_ACTION);
         assertTrue(buildingTile.placeFigures(player, 0));
@@ -189,7 +187,7 @@ public class BuildingTileTest {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         figures.add(player.getPlayerOrder());
         Building building = new SimpleBuilding(List.of(Effect.WOOD));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertTrue(buildingTile.skipAction(player));
         assertEquals(buildingTile.getFigures().size(), 0);
@@ -201,7 +199,7 @@ public class BuildingTileTest {
         Player player = new Player(new PlayerOrder(4, 6), new PlayerBoardMock());
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new SimpleBuilding(List.of(Effect.WOOD));
-        BuildingTile buildingTile = new BuildingTile(figures, depictedResources, building);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertFalse(buildingTile.skipAction(player));
     }
