@@ -58,11 +58,13 @@ public class BuildingTileTest {
     @Test
     public void testOccupiedState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new SimpleBuilding(List.of(Effect.WOOD));
         figures.add(new PlayerOrder(4, 6));
-        BuildingTile buildingTile = new BuildingTile(figures);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "occupied");
+        expectedStateMap.put("type of building", "simple building");
         expectedStateMap.put("player count", String.valueOf(1));
         expectedStateMap.put("player", String.valueOf(4));
 
@@ -73,10 +75,69 @@ public class BuildingTileTest {
     @Test
     public void testEmptyState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
-        BuildingTile buildingTile = new BuildingTile(figures);
+        Building building = new SimpleBuilding(List.of(Effect.WOOD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         Map<String, String> expectedStateMap = new LinkedHashMap<>();
         expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "simple building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        String expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+    }
+
+    @Test
+    public void testBuildingWithMoreResources() {
+        ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new SimpleBuilding(List.of(Effect.WOOD, Effect.STONE, Effect.GOLD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "simple building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        String expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+    }
+
+    @Test
+    public void testVariableBuilding() {
+        ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new VariableBuilding(1, 1);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "variable building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        String expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+
+
+        building = new VariableBuilding(7, 4);
+        buildingTile = new BuildingTile(figures, building);
+
+        expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "variable building");
+        expectedStateMap.put("player count", String.valueOf(0));
+
+        expectedState = new JSONObject(expectedStateMap).toString();
+        assertEquals(buildingTile.state(), expectedState);
+    }
+
+    @Test // TODO
+    public void testArbitraryBuilding() {
+        ArrayList<PlayerOrder> figures = new ArrayList<>();
+        Building building = new ArbitraryBuilding(3);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        Map<String, String> expectedStateMap = new LinkedHashMap<>();
+        expectedStateMap.put("building tile state", "unoccupied");
+        expectedStateMap.put("type of building", "arbitrary building");
         expectedStateMap.put("player count", String.valueOf(0));
 
         String expectedState = new JSONObject(expectedStateMap).toString();
@@ -89,7 +150,8 @@ public class BuildingTileTest {
         Player player = new Player(new PlayerOrder(4, 6), pbm);
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         figures.add(player.getPlayerOrder());
-        BuildingTile buildingTile = new BuildingTile(figures);
+        Building building = new SimpleBuilding(List.of(Effect.WOOD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertEquals(buildingTile.tryToPlaceFigures(player, 0), HasAction.NO_ACTION_POSSIBLE);
         assertEquals(buildingTile.tryToPlaceFigures(player, 1), HasAction.NO_ACTION_POSSIBLE);
@@ -103,7 +165,8 @@ public class BuildingTileTest {
         PlayerBoardMock pbm = new PlayerBoardMock();
         Player player = new Player(new PlayerOrder(4, 6), pbm);
         ArrayList<PlayerOrder> figures = new ArrayList<>();
-        BuildingTile buildingTile = new BuildingTile(figures);
+        Building building = new SimpleBuilding(List.of(Effect.WOOD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertEquals(buildingTile.tryToPlaceFigures(player, 0), HasAction.WAITING_FOR_PLAYER_ACTION);
         assertTrue(buildingTile.placeFigures(player, 0));
@@ -123,7 +186,8 @@ public class BuildingTileTest {
         Player player = new Player(new PlayerOrder(4, 6), pbm);
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         figures.add(player.getPlayerOrder());
-        BuildingTile buildingTile = new BuildingTile(figures);
+        Building building = new SimpleBuilding(List.of(Effect.WOOD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertTrue(buildingTile.skipAction(player));
         assertEquals(buildingTile.getFigures().size(), 0);
@@ -134,7 +198,8 @@ public class BuildingTileTest {
     public void testUnsuccessfulSkipAction() {
         Player player = new Player(new PlayerOrder(4, 6), new PlayerBoardMock());
         ArrayList<PlayerOrder> figures = new ArrayList<>();
-        BuildingTile buildingTile = new BuildingTile(figures);
+        Building building = new SimpleBuilding(List.of(Effect.WOOD));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertFalse(buildingTile.skipAction(player));
     }
