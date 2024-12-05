@@ -46,7 +46,21 @@ public class PlayerBoardGameBoardFacade implements InterfaceFeedTribe, Interface
 
     @Override
     public void giveEffect(Effect[] stuff) {
-        playerBoard.getPlayerResourcesAndFood().giveResources(List.of(stuff));
+        for(Effect effect: stuff) {
+            if(effect.isResourceOrFood()) {
+                playerBoard.getPlayerResourcesAndFood().giveResources(List.of(effect));
+            } else {
+                switch(effect) {
+                    case POINT -> playerBoard.addPoints(1);
+                    case BUILDING -> playerBoard.addHouse();
+                    case FIELD -> playerBoard.getTribeFedStatus().addField();
+                    case TOOL -> playerBoard.getPlayerTools().addTool();
+                    case ONE_TIME_TOOL2 -> playerBoard.getPlayerTools().addSingleUseTool(2);
+                    case ONE_TIME_TOOL3 -> playerBoard.getPlayerTools().addSingleUseTool(3);
+                    case ONE_TIME_TOOL4 -> playerBoard.getPlayerTools().addSingleUseTool(4);
+                }
+            }
+        }
     }
 
     @Override
