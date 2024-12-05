@@ -20,6 +20,7 @@ public class WaitingForToolUseState implements InterfaceGamePhaseState{
             return HasAction.WAITING_FOR_PLAYER_ACTION;
         }
 
+        toolUse.finishUsingTools();
         return HasAction.NO_ACTION_POSSIBLE;
     }
 

@@ -36,8 +36,11 @@ public class WaitingForToolUseStateTest {
 
         assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
 
+        assertTrue(toolUseMock.calledFinishUsingTools);
+
         toolUseMock.expectedCanUseTools = true;
 
+        assertEquals(HasAction.WAITING_FOR_PLAYER_ACTION, tryToMakeAutomaticAction());
     }
 
     private ActionResult noMoreToolsThisThrow(){

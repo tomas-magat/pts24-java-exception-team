@@ -8,6 +8,7 @@ public class ToolUseMock implements InterfaceToolUse {
     public boolean expectedCanUseTools;
     public boolean expectedFinishUsingTools;
     public int maxToolsUses = Integer.MAX_VALUE;
+    public boolean calledFinishUsingTools;
 
     @Override
     public boolean useTool(int idx) {
@@ -33,6 +34,7 @@ public class ToolUseMock implements InterfaceToolUse {
     @Override
     public boolean finishUsingTools() {
 
+        calledFinishUsingTools = true;
         return expectedFinishUsingTools;
     }
 }
