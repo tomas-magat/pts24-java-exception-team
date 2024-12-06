@@ -66,8 +66,8 @@ public class GameBoardFactory {
 
     public static List<BuildingTile> createBuildingTiles1(int players) { // TODO when BuildingTile fix merged
         List<BuildingTile> buildingTiles = new ArrayList<>();
-        for (int i = 0; i < players; i++)
-            buildingTiles.add(new BuildingTile(new ArrayList<>()));
+//        for (int i = 0; i < players; i++)
+//            buildingTiles.add(new BuildingTile(new ArrayList<>(), )); // TODO cakat kym sa opravi BuildingTile
         return buildingTiles;
     }
 
