@@ -44,6 +44,7 @@ public class PlaceOnToolMakerAdaptor implements InterfaceFigureLocationInternal 
 
     @Override
     public boolean newTurn() {
-        return toolMakerHutFields.newTurn();
+        toolMakerHutFields.newTurn();
+        return false;
     }
 }

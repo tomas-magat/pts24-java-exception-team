@@ -43,7 +43,8 @@ public class PlaceOnHutAdaptor implements InterfaceFigureLocationInternal {
 
     @Override
     public boolean newTurn() {
-        return toolMakerHutFields.newTurn();
+        toolMakerHutFields.newTurn();
+        return false;
     }
 }
 //tu uz musi byt 2 pre dve figurky lebo tu uz treba 2 nie ako predosle 1
