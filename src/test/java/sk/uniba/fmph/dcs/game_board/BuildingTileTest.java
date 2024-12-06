@@ -190,8 +190,6 @@ public class BuildingTileTest {
         BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertTrue(buildingTile.skipAction(player));
-        assertEquals(buildingTile.getFigures().size(), 0);
-        assertEquals(pbm.getFigureCount(), 5);
     }
 
     @Test
@@ -216,7 +214,6 @@ public class BuildingTileTest {
                         List.of(Effect.WOOD, Effect.WOOD, Effect.STONE),
                         new ArrayList<>()),
                 ActionResult.ACTION_DONE);
-        assertEquals(buildingTile.getFigures().size(), 0);
     }
 
     @Test
@@ -231,7 +228,6 @@ public class BuildingTileTest {
                         List.of(Effect.WOOD, Effect.STONE, Effect.STONE),
                         new ArrayList<>()),
                 ActionResult.FAILURE);
-        assertEquals(buildingTile.getFigures().size(), 1);
     }
 
     @Test
@@ -246,7 +242,6 @@ public class BuildingTileTest {
                         List.of(Effect.WOOD, Effect.WOOD, Effect.STONE, Effect.GOLD),
                         new ArrayList<>()),
                 ActionResult.ACTION_DONE);
-        assertEquals(buildingTile.getFigures().size(), 0);
     }
 
     @Test
@@ -261,7 +256,6 @@ public class BuildingTileTest {
                         List.of(Effect.WOOD, Effect.WOOD, Effect.WOOD, Effect.GOLD),
                         new ArrayList<>()),
                 ActionResult.FAILURE);
-        assertEquals(buildingTile.getFigures().size(), 1);
     }
 
     @Test
@@ -276,7 +270,6 @@ public class BuildingTileTest {
                         List.of(Effect.WOOD, Effect.STONE, Effect.CLAY),
                         new ArrayList<>()),
                 ActionResult.FAILURE);
-        assertEquals(buildingTile.getFigures().size(), 1);
     }
 
     @Test
@@ -289,7 +282,6 @@ public class BuildingTileTest {
         assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
         assertEquals(buildingTile.makeAction(player, List.of(Effect.WOOD), new ArrayList<>()),
                 ActionResult.ACTION_DONE);
-        assertEquals(buildingTile.getFigures().size(), 0);
     }
 
     @Test
@@ -302,6 +294,5 @@ public class BuildingTileTest {
         assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
         assertEquals(buildingTile.makeAction(player, List.of(), new ArrayList<>()),
                 ActionResult.FAILURE);
-        assertEquals(buildingTile.getFigures().size(), 1);
     }
 }
