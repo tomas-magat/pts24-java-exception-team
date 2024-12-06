@@ -23,7 +23,7 @@ class PlayerBoardMock implements InterfacePlayerBoardGameBoard {
 
     @Override
     public boolean takeResources(Effect[] stuff) {
-        return false;
+        return true;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class BuildingTileTest {
     }
 
     @Test
-    public void testBuildingWithMoreResources() {
+    public void testBuildingWithMoreResourcesState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new SimpleBuilding(List.of(Effect.WOOD, Effect.STONE, Effect.GOLD));
         BuildingTile buildingTile = new BuildingTile(figures, building);
@@ -103,7 +103,7 @@ public class BuildingTileTest {
     }
 
     @Test
-    public void testVariableBuilding() {
+    public void testVariableBuildingState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new VariableBuilding(1, 1);
         BuildingTile buildingTile = new BuildingTile(figures, building);
@@ -129,8 +129,8 @@ public class BuildingTileTest {
         assertEquals(buildingTile.state(), expectedState);
     }
 
-    @Test // TODO
-    public void testArbitraryBuilding() {
+    @Test
+    public void testArbitraryBuildingState() {
         ArrayList<PlayerOrder> figures = new ArrayList<>();
         Building building = new ArbitraryBuilding(3);
         BuildingTile buildingTile = new BuildingTile(figures, building);
@@ -202,5 +202,106 @@ public class BuildingTileTest {
         BuildingTile buildingTile = new BuildingTile(figures, building);
 
         assertFalse(buildingTile.skipAction(player));
+    }
+
+    @Test
+    public void testMakeSuccessfulActionSimpleBuilding() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new SimpleBuilding(List.of(Effect.WOOD, Effect.WOOD, Effect.STONE));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player,
+                        List.of(Effect.WOOD, Effect.WOOD, Effect.STONE),
+                        new ArrayList<>()),
+                ActionResult.ACTION_DONE);
+        assertEquals(buildingTile.getFigures().size(), 0);
+    }
+
+    @Test
+    public void testMakeUnsuccessfulActionSimpleBuilding() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new SimpleBuilding(List.of(Effect.WOOD, Effect.WOOD, Effect.STONE));
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player,
+                        List.of(Effect.WOOD, Effect.STONE, Effect.STONE),
+                        new ArrayList<>()),
+                ActionResult.FAILURE);
+        assertEquals(buildingTile.getFigures().size(), 1);
+    }
+
+    @Test
+    public void testMakeSuccessfulActionVariableBuilding() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new VariableBuilding(4, 3);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player,
+                        List.of(Effect.WOOD, Effect.WOOD, Effect.STONE, Effect.GOLD),
+                        new ArrayList<>()),
+                ActionResult.ACTION_DONE);
+        assertEquals(buildingTile.getFigures().size(), 0);
+    }
+
+    @Test
+    public void testMakeActionVariableBuildingTooFewKinds() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new VariableBuilding(4, 3);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player,
+                        List.of(Effect.WOOD, Effect.WOOD, Effect.WOOD, Effect.GOLD),
+                        new ArrayList<>()),
+                ActionResult.FAILURE);
+        assertEquals(buildingTile.getFigures().size(), 1);
+    }
+
+    @Test
+    public void testMakeActionVariableBuildingTooFewResources() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new VariableBuilding(4, 3);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player,
+                        List.of(Effect.WOOD, Effect.STONE, Effect.CLAY),
+                        new ArrayList<>()),
+                ActionResult.FAILURE);
+        assertEquals(buildingTile.getFigures().size(), 1);
+    }
+
+    @Test
+    public void testMakeSuccessfulActionArbitraryBuilding() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new ArbitraryBuilding(7);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player, List.of(Effect.WOOD), new ArrayList<>()),
+                ActionResult.ACTION_DONE);
+        assertEquals(buildingTile.getFigures().size(), 0);
+    }
+
+    @Test
+    public void testMakeUnsuccessfulActionArbitraryBuilding() {
+        Player player = new Player(new PlayerOrder(2, 5), new PlayerBoardMock());
+        List<PlayerOrder> figures = List.of(new PlayerOrder(2, 5));
+        Building building = new ArbitraryBuilding(7);
+        BuildingTile buildingTile = new BuildingTile(figures, building);
+
+        assertEquals(buildingTile.tryToMakeAction(player), HasAction.WAITING_FOR_PLAYER_ACTION);
+        assertEquals(buildingTile.makeAction(player, List.of(), new ArrayList<>()),
+                ActionResult.FAILURE);
+        assertEquals(buildingTile.getFigures().size(), 1);
     }
 }

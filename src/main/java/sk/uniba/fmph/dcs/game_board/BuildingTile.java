@@ -83,7 +83,7 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
         // treba zistit, ci konkretny building ide postavit z danych inputResources
         OptionalInt buildingPoints = building.build(inputResources);
         if(buildingPoints.isEmpty()) {
-            throw new IllegalArgumentException("Failed to calculate building score.");
+            return ActionResult.FAILURE;
         } else {
             player.getPlayerBoard().giveEffect(new Effect[]{Effect.BUILDING});
             for(int i = 0; i < buildingPoints.getAsInt(); ++i) {
@@ -92,11 +92,10 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
         }
 
         // po skonceni akcie si hrac zoberie naspat figurku
-        for(PlayerOrder figure: figures) {
-            if(figure.getOrder() == player.getPlayerOrder().getOrder()) {
-                figures.remove(figure);
-                player.getPlayerBoard().addNewFigure();
-            }
+        int originalSize = figures.size();
+        figures.removeIf(figure -> figure.getOrder() == player.getPlayerOrder().getOrder());
+        for(int i = 0; i < originalSize - figures.size(); ++i) {
+            player.getPlayerBoard().addNewFigure();
         }
 
         return ActionResult.ACTION_DONE;
@@ -104,14 +103,13 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
 
     @Override
     public boolean skipAction(Player player) {
-        for(PlayerOrder figure: figures) {
-            if(figure.getOrder() == player.getPlayerOrder().getOrder()) {
-                figures.remove(figure);
-                player.getPlayerBoard().addNewFigure();
-                return true;
-            }
+        int originalSize = figures.size();
+        figures.removeIf(figure -> figure.getOrder() == player.getPlayerOrder().getOrder());
+        for(int i = 0; i < originalSize - figures.size(); ++i) {
+            player.getPlayerBoard().addNewFigure();
+            return true;
         }
-        return false; // neuspesny skip
+        return false; // neuspesny skip (ak originalSize == figures.size(), teda figurka je ineho hraca)
     }
 
     @Override
