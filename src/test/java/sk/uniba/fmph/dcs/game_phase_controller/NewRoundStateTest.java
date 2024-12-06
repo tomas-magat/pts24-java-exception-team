@@ -60,14 +60,12 @@ public class NewRoundStateTest {
         figureLocationMock1.expectedNewTurn = false;
         figureLocationMock2.expectedNewTurn = true;
 
-        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
-        checkNewTurnCalled();
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
 
         figureLocationMock1.expectedNewTurn = true;
         figureLocationMock2.expectedNewTurn = false;
 
-        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, tryToMakeAutomaticAction());
-        checkNewTurnCalled();
+        assertEquals(HasAction.NO_ACTION_POSSIBLE, tryToMakeAutomaticAction());
 
         figureLocationMock1.expectedNewTurn = true;
         figureLocationMock2.expectedNewTurn = true;
