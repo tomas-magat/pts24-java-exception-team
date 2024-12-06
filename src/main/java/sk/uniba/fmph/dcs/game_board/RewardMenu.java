@@ -10,20 +10,21 @@ import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RewardMenu implements InterfaceTakeReward {
+public class RewardMenu implements InterfaceRewardMenu {
     private final List<Effect> menu;
     private final List<Player> players;
-    private final List<PlayerOrder> playersLeft; // players who haven't collected their reward yet
+    private final List<PlayerOrder> playersLeft;
 
-    public RewardMenu(final List<Effect> menu, final List<Player> players) {
+    public RewardMenu(final List<Player> players) {
         this.players = new ArrayList<>();
         this.players.addAll(players);
 
         this.menu = new ArrayList<>();
         playersLeft = new ArrayList<>();
-        initiate(menu);
+//        initiate(menu);
     }
 
+    @Override
     public void initiate(final List<Effect> menu) {
         this.menu.clear();
         this.menu.addAll(menu);
@@ -35,6 +36,7 @@ public class RewardMenu implements InterfaceTakeReward {
         return playersLeft.size();
     }
 
+    @Override
     public String state() {
         JSONObject state = new JSONObject();
 
@@ -45,7 +47,7 @@ public class RewardMenu implements InterfaceTakeReward {
         state.put("menu", menuJson);
 
         JSONArray playersLeftJson = new JSONArray();
-        for (Player player : players) {
+        for (PlayerOrder player : playersLeft) {
             playersLeftJson.put(player.toString());
         }
         state.put("players_left", playersLeftJson);
@@ -87,9 +89,10 @@ public class RewardMenu implements InterfaceTakeReward {
             return HasAction.NO_ACTION_POSSIBLE;
         }
 
-        if (menu.size() == 1) { // only 1 effect available, apply it
+        if (menu.size() == 1) {
             Player p = getPlayer(player);
             p.getPlayerBoard().giveEffect(menu.toArray(new Effect[0]));
+            playersLeft.remove(player);
             return HasAction.AUTOMATIC_ACTION_DONE;
         }
 

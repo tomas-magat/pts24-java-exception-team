@@ -17,16 +17,18 @@ public class AllPlayersTakeRewardTest {
         Player player3 = new Player(new PlayerOrder(3, 4), new PlayerBoardMock());
         List<Player> players = List.of(player1, player2, player3);
 
-        List<Effect> rewards = List.of(Effect.FOOD, Effect.WOOD, Effect.STONE);
-        RewardMenu rewardMenu = new RewardMenu(rewards, players);
+//        List<Effect> rewards = List.of(Effect.FOOD, Effect.WOOD, Effect.STONE);
+        ThrowMock throwMock = new ThrowMock();
+        throwMock.expected = new int[] {6, 1, 3};
+        RewardMenu rewardMenu = new RewardMenu(players);
 
-        AllPlayersTakeReward allPlayersTakeReward = new AllPlayersTakeReward(rewardMenu);
+        AllPlayersTakeReward allPlayersTakeReward = new AllPlayersTakeReward(4, rewardMenu, throwMock);
 
         // Player 1 selects a reward
         assertTrue("Player 1 should be able to select a reward", allPlayersTakeReward.performEffect(player1, Effect.WOOD));
 
         // Player 2 selects a reward
-        assertTrue("Player 2 should be able to select a reward", allPlayersTakeReward.performEffect(player2, Effect.FOOD));
+        assertTrue("Player 2 should be able to select a reward", allPlayersTakeReward.performEffect(player2, Effect.FIELD));
 
         // Player 3 selects a reward
         assertFalse("Player 3 should be able to select a reward", allPlayersTakeReward.performEffect(player3, Effect.GOLD));
@@ -34,6 +36,14 @@ public class AllPlayersTakeRewardTest {
 
         // Verify that all players have selected their rewards
         assertEquals("All players should have selected their rewards", 0, rewardMenu.getPlayersLeftCount());
+    }
+
+    private static class ThrowMock implements InterfaceThrow {
+        public int[] expected;
+        @Override
+        public int[] throwDices(int players) {
+            return expected;
+        }
     }
 
 }

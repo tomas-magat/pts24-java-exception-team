@@ -17,7 +17,7 @@ public class GetCard implements EvaluateCivilisationCardImmediateEffect {
 
     @Override
     public boolean performEffect(Player player, Effect choice) {
-        currentThrow.initiate(player, null, 0);
+//        currentThrow.initiate(player, null, 0);
 
         Optional<CivilisationCard> deckTop = cardDeck.getTop();
         CivilisationCard deckTopCard;
