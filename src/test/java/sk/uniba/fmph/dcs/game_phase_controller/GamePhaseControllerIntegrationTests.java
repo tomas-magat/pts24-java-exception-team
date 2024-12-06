@@ -297,7 +297,7 @@ public class GamePhaseControllerIntegrationTests {
             figureLocationMock1.expectedNewTurn = true;
         }
         if(places.get(Location.CLAY_MOUND) instanceof FigureLocationMock figureLocationMock2){
-            figureLocationMock2.expectedNewTurn = true;
+            figureLocationMock2.expectedNewTurn = false;
         }
 
         goToFeedTribeState();
