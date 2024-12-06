@@ -23,8 +23,8 @@ public class RewardMenuTest {
         String menuState = rewardMenu.state();
         assertTrue("State should include FOOD", menuState.contains("FOOD"));
         assertTrue("State should include WOOD", menuState.contains("WOOD"));
-        assertTrue("State should include players", menuState.contains(player1.toString()));
-        assertTrue("State should include players", menuState.contains(player2.toString()));
+        assertTrue("State should include players", menuState.contains(player1.getPlayerOrder().toString()));
+        assertTrue("State should include players", menuState.contains(player2.getPlayerOrder().toString()));
     }
 
     @Test
