@@ -5,10 +5,10 @@ import sk.uniba.fmph.dcs.stone_age.*;
 import java.util.Collection;
 
 public class PlaceOnToolMakerAdaptor implements InterfaceFigureLocationInternal {
-    private ToolMakerHutFields toolMakerHutFields;
+    private final ToolMakerHutFields toolMakerHutFields;
 
-    public PlaceOnToolMakerAdaptor() {
-        this.toolMakerHutFields = new ToolMakerHutFields();
+    public PlaceOnToolMakerAdaptor(ToolMakerHutFields toolMakerHutFields) {
+        this.toolMakerHutFields = toolMakerHutFields;
     }
 
     @Override
