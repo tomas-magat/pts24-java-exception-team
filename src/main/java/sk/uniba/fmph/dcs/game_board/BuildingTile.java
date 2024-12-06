@@ -91,25 +91,15 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
             }
         }
 
-        // po skonceni akcie si hrac zoberie naspat figurku
-        int originalSize = figures.size();
-        figures.removeIf(figure -> figure.getOrder() == player.getPlayerOrder().getOrder());
-        for(int i = 0; i < originalSize - figures.size(); ++i) {
-            player.getPlayerBoard().addNewFigure();
-        }
-
         return ActionResult.ACTION_DONE;
     }
 
     @Override
     public boolean skipAction(Player player) {
-        int originalSize = figures.size();
-        figures.removeIf(figure -> figure.getOrder() == player.getPlayerOrder().getOrder());
-        for(int i = 0; i < originalSize - figures.size(); ++i) {
-            player.getPlayerBoard().addNewFigure();
-            return true;
+        if(getFigures().isEmpty()) {
+            return false;
         }
-        return false; // neuspesny skip (ak originalSize == figures.size(), teda figurka je ineho hraca)
+        return figures.getFirst().getOrder() == player.getPlayerOrder().getOrder();
     }
 
     @Override
