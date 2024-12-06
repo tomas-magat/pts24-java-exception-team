@@ -25,6 +25,9 @@ public class NewRoundState implements InterfaceGamePhaseState{
 
                 gameEnded = HasAction.AUTOMATIC_ACTION_DONE;
             }
+            else{
+                return HasAction.NO_ACTION_POSSIBLE;
+            }
         }
 
         if(gameEnded == HasAction.AUTOMATIC_ACTION_DONE){
