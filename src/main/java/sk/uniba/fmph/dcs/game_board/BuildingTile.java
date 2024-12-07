@@ -91,15 +91,20 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
             }
         }
 
+        // po skonceni akcie si hrac zoberie naspat figurku
+        figures.clear();
+
         return ActionResult.ACTION_DONE;
     }
 
     @Override
     public boolean skipAction(Player player) {
-        if(getFigures().isEmpty()) {
-            return false;
+        int originalSize = figures.size();
+        figures.removeIf(figure -> figure.getOrder() == player.getPlayerOrder().getOrder());
+        if(originalSize == figures.size()) {
+            return false;   // neuspesny skip (figurka neumiestnena alebo je ineho hraca)
         }
-        return figures.getFirst().getOrder() == player.getPlayerOrder().getOrder();
+        return true;
     }
 
     @Override
