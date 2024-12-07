@@ -33,8 +33,12 @@ public class ToolMakerHutFields implements InterfaceGetState {
         return true;
     }
 
+    public boolean tryToMakeActionToolMaker(Player player) {
+        return toolMakerFigures.contains(player.getPlayerOrder());
+    }
+
     public boolean actionToolMaker(Player player) {
-        if (!toolMakerFigures.contains(player.getPlayerOrder())) return false;
+        if (!tryToMakeActionToolMaker(player)) return false;
         player.getPlayerBoard().takeFigures(-1);
         player.getPlayerBoard().giveEffect(new Effect[] {Effect.TOOL});
         toolMakerFigures.clear();
@@ -58,8 +62,12 @@ public class ToolMakerHutFields implements InterfaceGetState {
         return true;
     }
 
+    public boolean tryToMakeActionHut(Player player) {
+        return hutFigures.contains(player.getPlayerOrder());
+    }
+
     public boolean actionHut(Player player) {
-        if (!hutFigures.contains(player.getPlayerOrder())) return false;
+        if (!tryToMakeActionHut(player)) return false;
         player.getPlayerBoard().takeFigures(-2);
         player.getPlayerBoard().addNewFigure();
         hutFigures.clear();
@@ -81,8 +89,12 @@ public class ToolMakerHutFields implements InterfaceGetState {
         return true;
     }
 
+    public boolean tryToMakeActionFields(Player player) {
+        return fieldsFigures.contains(player.getPlayerOrder());
+    }
+
     public boolean actionFields(Player player) {
-        if (!fieldsFigures.contains(player.getPlayerOrder())) return false;
+        if (!tryToMakeActionFields(player)) return false;
         player.getPlayerBoard().takeFigures(-1);
         player.getPlayerBoard().giveEffect(new Effect[] {Effect.FIELD});
         fieldsFigures.clear();

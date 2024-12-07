@@ -40,7 +40,7 @@ public class PlaceOnFieldsAdaptor implements InterfaceFigureLocationInternal {
 
     @Override
     public HasAction tryToMakeAction(Player player) {
-        return toolMakerHutFields.canPlaceOnFields(player) ? HasAction.WAITING_FOR_PLAYER_ACTION : HasAction.NO_ACTION_POSSIBLE;
+        return toolMakerHutFields.tryToMakeActionFields(player) ? HasAction.WAITING_FOR_PLAYER_ACTION : HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override

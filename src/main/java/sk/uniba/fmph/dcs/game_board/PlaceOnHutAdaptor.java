@@ -38,7 +38,7 @@ public class PlaceOnHutAdaptor implements InterfaceFigureLocationInternal {
 
     @Override
     public HasAction tryToMakeAction(Player player) {
-        return toolMakerHutFields.canPlaceOnHut(player) ? HasAction.WAITING_FOR_PLAYER_ACTION : HasAction.NO_ACTION_POSSIBLE;
+        return toolMakerHutFields.tryToMakeActionHut(player) ? HasAction.WAITING_FOR_PLAYER_ACTION : HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
